@@ -9,18 +9,12 @@
     "coverage": "nyc mocha"
   },
   "authors": {
-    "name1": "Team Member 1",
-    "email1": "team.member1@example.com",
-    "name2": "Team Member 1",
-    "email2": "team.member1@example.com",
-    "name3": "Team Member 1",
-    "email3": "team.member1@example.com",
-    "name4": "Team Member 1",
-    "email4": "team.member1@example.com",
-    "name5": "Team Member 1",
-    "email5": "team.member1@example.com",
-    "name6": "Team Member 1",
-    "email6": "team.member1@example.com"
+    "name1": "Jordan Shiu",
+    "name2": "Jerahmeel Mendoza",
+    "name3": "Kalif Byrd",
+    "name4": "Sarron Tadesse",
+    "name5": "Joanna Estrada",
+    "name6": "Brandon Bazile"
   },
   "license": "MIT",
   "devDependencies": {
