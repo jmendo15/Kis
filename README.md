@@ -22,13 +22,16 @@ Pattern matching, akin to languages like Scala or Rust, is integrated, allowing 
 - Similar to languages like Scala or Rust, allows matching values against patterns.
 - Enables more expressive and concise code, especially when working with complex data structures.
 -Requires sophisticated static analysis to ensure correct and efficient implementation.
-4.Immutable Data Types:
+
+4. Immutable Data Types:
 - Once created, objects of these types cannot be modified.
 - This feature is crucial for functional programming paradigms and can help in writing safer, more predictable code.
 - The language runtime and compiler must enforce and optimize the use of immutable data.
-5.Static Scoping with Nested Functions:
+  
+5. Static Scoping with Nested Functions:
 - Allows functions to be defined within other functions, creating a hierarchy of scopes.
 - Requires a more complex symbol table and scope management in the compiler to handle the visibility and lifetime of variables correctly.
+  
 6. Module System:
 - A system for organizing and packaging code with import/export capabilities.
 - Ensures code modularity and reuse.
