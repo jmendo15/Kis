@@ -8,14 +8,14 @@
     "test": "mocha tests",
     "coverage": "nyc mocha"
   },
-  "authors": {
-    "name1": "Jordan Shiu",
-    "name2": "Jerahmeel Mendoza",
-    "name3": "Kalif Byrd",
-    "name4": "Sarron Tadesse",
-    "name5": "Joanna Estrada",
-    "name6": "Brandon Bazile"
-  },
+  "contributors": [
+    "Jordan Shiu",
+    "Jerahmeel Mendoza",
+    "Kalif Byrd",
+    "Sarron Tadesse",
+    "Joanna Estrada",
+    "Brandon Bazile"
+  ],
   "license": "MIT",
   "devDependencies": {
     "assert": "^2.0.0",
