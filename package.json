@@ -8,14 +8,7 @@
     "test": "c8 mocha",
     "coverage": "nyc mocha"
   },
-  "contributors": [
-    "Jordan Shiu",
-    "Jerahmeel Mendoza",
-    "Kalif Byrd",
-    "Sarron Tadesse",
-    "Joanna Estrada",
-    "Brandon Bazile"
-  ],
+  "author": "Jordan Shiu, Jerahmeel Mendoza, Kalif Byrd, Sarron Tadesse,Joanna Estrada, Brandon Bazile",
   "license": "MIT",
   "devDependencies": {
     "c8": "^9.1.0",
