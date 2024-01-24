@@ -15,8 +15,8 @@ Kis also places a strong emphasis on immutability, offering immutable data types
 1. Rich Type System:
 - Includes primitive types and user-defined types.
 - Advanced features like generics allow for creating functions and data structures that can operate on different types without sacrificing type safety.
-2. Type inference reduces the need for explicit type declarations, making the language more concise and readable.
-- Function Overloading and Operator Overloading:
+- Type inference reduces the need for explicit type declarations, making the language more concise and readable.
+2. Function Overloading and Operator Overloading:
 - Functions and operators can behave differently based on their argument types.
 - This adds complexity to type checking as the compiler must determine the correct function or operator to use based on the context.
 3. Immutable Data Types:
