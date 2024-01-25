@@ -12,11 +12,11 @@ Kis also places a strong emphasis on immutability, offering immutable data types
 
 # Authors:
 
-Jerahmeel Mendoza
-Jordan Shiu
-Kalif Byrd
-Sarron Tadesse
-Joanna Estrada
+Jerahmeel Mendoza,
+Jordan Shiu,
+Kalif Byrd,
+Sarron Tadesse,
+Joanna Estrada,
 Brandon Bazile
 
 # Features:
