@@ -45,7 +45,10 @@ Brandon Bazile
 - Requires the compiler to perform static analysis for dependency resolution and to handle issues like name collisions and visibility.
 
 # Example Programs:
+<img width="788" alt="Screenshot 2024-01-28 at 3 56 58 PM" src="https://github.com/jmendo15/Kis/assets/89826597/8e123710-a8a0-4dbf-9177-73bb4a4087fb">
 
-<img width="322" alt="Screenshot 2024-01-24 at 3 15 43 PM" src="https://github.com/jmendo15/Kis/assets/89826597/1a8ccc6c-3e48-4355-8828-a880a0983be0">
+<img width="777" alt="Screenshot 2024-01-28 at 3 59 46 PM" src="https://github.com/jmendo15/Kis/assets/89826597/d9a4ee43-db79-4f36-bd11-6df47e85f2a5">
 
-<img width="329" alt="Screenshot 2024-01-24 at 3 17 49 PM" src="https://github.com/jmendo15/Kis/assets/89826597/33315403-3bb6-4977-8a54-bfd2cb3c04b8">
+
+
+
