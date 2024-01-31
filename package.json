@@ -1,13 +1,17 @@
 {
   "name": "kis",
   "version": "1.0.0",
-  "description": "PROJECT DESCRIPTION",
+  "description": "A compiler for Kis",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "test": "c8 mocha",
     "coverage": "nyc mocha"
   },
+  "keywords": [
+    "compiler",
+    "ohm"
+  ],
   "author": "Jordan Shiu, Jerahmeel Mendoza, Kalif Byrd, Sarron Tadesse, Joanna Estrada, Brandon Bazile",
   "license": "MIT",
   "devDependencies": {
