@@ -17,7 +17,7 @@ Jordan Shiu,
 Kalif Byrd,
 Sarron Tadesse,
 Joanna Estrada,
-Brandon Bazile
+
 
 # Features:
 
