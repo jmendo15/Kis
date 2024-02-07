@@ -12,7 +12,7 @@
     "compiler",
     "ohm"
   ],
-  "author": "Jordan Shiu, Jerahmeel Mendoza, Kalif Byrd, Sarron Tadesse, Joanna Estrada, Brandon Bazile",
+  "author": "Jordan Shiu, Jerahmeel Mendoza, Kalif Byrd, Sarron Tadesse, Joanna Estrada",
   "license": "MIT",
   "devDependencies": {
     "c8": "^9.1.0",
