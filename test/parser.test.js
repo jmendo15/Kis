@@ -44,6 +44,7 @@ describe("The parser", () => {
     for (const [scenario, source] of syntaxChecks) {
         it(`properly specifies ${scenario}`, () => {
             assert(parse(source).succeeded())
+            console.log("Syntax is ok")
         })
     }
     for (const [scenario, source, errorMessagePattern] of syntaxErrors) {
