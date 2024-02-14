@@ -12,7 +12,7 @@ import math
 
 set result = math.add(5,3)
 
-println(result)
+meow(result)
 
 
 

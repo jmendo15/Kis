@@ -1,0 +1,26 @@
+//Example of for looping with and without a break
+
+//List of cats:
+cats = ["garfield", "cleopatra", "sphinx"]
+
+//Will print garfield cleopatra sphinx
+fur cat in cats:
+    meow(cat)
+nap
+
+//Will print garfield cleopatra
+fur cat in cars:
+    if cat == "sphinx":
+        break
+    else
+        meow(cat)
+    nap
+nap
+
+//NOTE:
+// fur is a for loop
+
+
+
+
+
