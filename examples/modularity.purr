@@ -1,0 +1,20 @@
+//Creating a module and exporting a function within IT
+module math
+
+    export meow add(a: int, b: int) 
+        purr a + b
+    nap
+
+nap
+
+//Importing the math module and using math.add
+import math
+
+set result = math.add(5,3)
+
+println(result)
+
+
+
+
+

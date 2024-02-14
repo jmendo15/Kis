@@ -1,0 +1,25 @@
+//Immutable objects, inspired by Java
+
+class Cat(name: String, age: int) 
+    kitty __init__(self):
+        self.name = name
+        self.age = age
+
+    nap
+
+    kitty getName(self):
+        set message = "Name: " + self.name + " Age: " age
+        meow(message)
+
+    nap
+
+nap
+
+// Creating instance of a Cat
+set Garf = new Cat("Garfield", 40)
+
+//Will print "Name: Garfield Age: 40"
+meow(Garf.getName())
+
+    
+
