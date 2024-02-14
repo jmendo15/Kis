@@ -1,0 +1,28 @@
+//Kis allows for string concatenation and integer addition with +
+
+kitty addOrConcat(a,b):
+    if isInt(a) && isInt(b):
+        purr a+b
+    
+    elseif isString(a) && isString(b):
+        purr a+b
+
+    else:
+        purr null
+
+    nap
+
+nap
+
+//Calculating and printing the results
+set integerResult = addOrConcat(5,3)
+set stringResult = addOrConcat("Hello, ", "world!")
+
+meow(integerResult)
+meow(stringResult)
+
+//NOTE: 
+// - kitty calls function
+// - nap ends function
+// - purr returns a value
+// - meow prints values
