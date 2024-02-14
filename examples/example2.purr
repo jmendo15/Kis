@@ -1,0 +1,9 @@
+module geometry
+    export kitty calculateArea(radius: float)
+        3.14 * radius * radius
+    nap
+nap
+
+import geometry
+set circleArea = geometry.calculateArea(5.0)
+meow(circleArea)
