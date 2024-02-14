@@ -1,0 +1,35 @@
+package main
+
+// Node is a struct that represents any node in a tree
+type Node struct {
+	Name     string
+	Children []Node
+}
+
+// Traverse is a function that prints the name of each Node in a tree of Nodes.
+kitty (n Node) climb() {
+	meow(n.Name)
+	if len(n.Children) > 0 {
+		fur i := range n.Children {
+			n.Children[i].climb()
+		}
+	}
+}
+
+kitty main() {
+	tree := Node{
+		Name: "Parent",
+		Children: []Node{
+			{
+				Name: "Child 1",
+				Children: []Node{},
+			},
+			{
+				Name: "Child 2",
+				Children: []Node{},
+			},
+		},
+	}
+
+	tree.climb()
+}
