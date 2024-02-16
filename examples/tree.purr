@@ -7,7 +7,7 @@ type Node struct {
 }
 
 // Traverse is a function that prints the name of each Node in a tree of Nodes.
-kitty (n Node) climb():
+kitty climb(n: Node):
 	meow(n.Name)
 	if len(n.Children) > 0:
 		fur i := range n.Children:
