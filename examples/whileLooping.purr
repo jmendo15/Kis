@@ -17,6 +17,7 @@ whisker i < top:
     if i % 2 == 0:
         meow(i)
         i++
+    nap
     else:
         i++
     nap
