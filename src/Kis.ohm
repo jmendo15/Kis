@@ -9,17 +9,20 @@ Kis {
                                 | WhileStmt
                                 | ClassDecl
                                 | BuiltInFunctions
+                                | WhileLoop
+                                | IncrementStmt
     
+    IncrementStmt 	   = id "++"
     Assignment  	   = "set" id "=" Exp
     
         
-    StructDecl			 = "type" id Struct
-    Struct 					= "{" id ":" Type "}"
+    StructDecl		   = "type" id Struct
+    Struct 			   = "{" id ":" Type "}"
     
-    FuncDecl    		= "kitty" id Params Block "nap"
-    Params     		     = "(" ListOf<Param, ","> ")"
-    Param      			  = id (":" id)?
-    Type           			= Type "?"                                      --optional
+    FuncDecl    	   = "kitty" id Params Block "nap"
+    Params     		   = "(" ListOf<Param, ","> ")"
+    Param      		   = id (":" id)?
+    Type           			= Type "?"                                          --optional
               		   			| "[" Type "]"                                  --array
                        			| "(" ListOf<Type, ","> ")" "->" Type           --function
                                 | "isInt" "(" id ")"                            --isInt
@@ -53,9 +56,8 @@ Kis {
     ReturnStatement     = "purr" Expression
     Expression = identifier + identifier |identifier identifier
   	
-    WhileLoop       = "whisker" (Expression | Exp | id) ":" Indent Stmt* "nap"
     
-    
+    WhileLoop = "whisker" Exp ":" Indent Stmt* Dedent "nap"
     
     
     
@@ -87,17 +89,17 @@ Kis {
             					| "(" Exp ")"                                   -- paren_to_group
              
              
-    if       					= "if" ~alnum
-    elseif   				 = "elseif" ~alnum
-    else     				 = "else" ~alnum
-    for      				  = "fur" ~alnum
+    if       				= "if" ~alnum
+    elseif   				= "elseif" ~alnum
+    else     				= "else" ~alnum
+    for      				= "fur" ~alnum
     while					= "whisker" ~alnum
     class					= "class" ~alnum   
-    num					   = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
-    true					 = "true" ~idchar
-    false					 = "false" ~idchar
-    id						   = ~keyword letter alnum*
+    num					    = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
+    true					= "true" ~idchar
+    false					= "false" ~idchar
+    id						= ~keyword letter alnum*
     idchar   				= letter | digit | "_"
-    keyword  			  = if | elseif | else | for | while | class
+    keyword  			    = if | elseif | else | for | while | class
     space      			   += "//" (~"\n" any)*                             --comment
 }
