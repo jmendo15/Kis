@@ -8,9 +8,9 @@ fur cat in cats:
     meow(cat)
 nap
 
-//Will print garfield cleopatra
-fur cat in cars:
-    if cat == "sphinx":
+//Will print cleopatra
+fur cat in cats:
+    if cat == "sphinx" || cat == "garfield":
         break
     else
         meow(cat)

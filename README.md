@@ -18,7 +18,6 @@ Kalif Byrd,
 Sarron Tadesse,
 Joanna Estrada,
 
-
 # Features:
 
 1. Rich Type System:
@@ -38,17 +37,8 @@ Joanna Estrada,
 - This feature is crucial for functional programming paradigms and can help in writing safer, more predictable code.
 - The language runtime and compiler must enforce and optimize the use of immutable data.
 
-4. Module System:
-
-- A system for organizing and packaging code with import/export capabilities.
-- Ensures code modularity and reuse.
-- Requires the compiler to perform static analysis for dependency resolution and to handle issues like name collisions and visibility.
-
 # Example Programs:
+
 <img width="788" alt="Screenshot 2024-01-28 at 3 56 58 PM" src="https://github.com/jmendo15/Kis/assets/89826597/8e123710-a8a0-4dbf-9177-73bb4a4087fb">
 
 <img width="777" alt="Screenshot 2024-01-28 at 3 59 46 PM" src="https://github.com/jmendo15/Kis/assets/89826597/d9a4ee43-db79-4f36-bd11-6df47e85f2a5">
-
-
-
-
