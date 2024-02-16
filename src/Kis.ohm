@@ -7,13 +7,13 @@ Kis {
                                 | PrintStmt
                                 | IfStmt
                                 | ForStmt
-                                
                                 | WhileStmt
                                 | ClassDecl
                                 | BuiltInFunctions
-                               
                                 | IncrementStmt
                                 | ExpressionStmt
+                                | CompareStrings
+                                | BreakStmt
                                
                                 
     
@@ -36,34 +36,45 @@ Kis {
     
     PrintStmt   		  = "meow" "(" Exp ")"
     
-    ForStmt     		  = for ForExp Block
+    ForStmt     		  = for ForExp Block 
     ForExp      		  = id "in" id
     
     WhileStmt			= while Exp Block
     
     ClassDecl			= class --NEEDS_TO_BE_COMPLETED
     
-    Block 				   = ":" Stmt* "nap"
+    Block 				   = ":" Stmt* ("nap"| BreakStmt)
+     
+
+
     
     
     BuiltInFunctions    = "kitty" AddOrConcat  --builtin
     
     AddOrConcat = "addOrConcat" "(" paramList ")"  
     
-    ForLoop             = "fur" identifier "in" identifier ":" Indent LoopBody* Dedent
+    //ForLoop             = "fur" identifier "in" identifier ":" Indent LoopBody* Dedent
+    
+
     
     
     
     LoopBody         = Stmt | ExpressionStmt  // Adjust as necessary to include specific statements allowed inside loops
+    
+    // Embedding the pattern directly if integration issues persist
+    CompareStrings = identifier "==" "\"" (~"\"" any)* "\""
+  
+    
+    
     ExpressionStmt = Exp ";"
     IncrementStmt 	   = id "++"
-    
+    BreakStmt = "break"
     
     paramList = identifier "," identifier
     identifier = letter | digit (letter | digit)*  --defining
     Indent          = "    " // Assume 4 spaces for simplicity
  	Dedent          = "\n"  // Assume dedent is a newline for simplicity
-    Blocks = ":"  Indent (IfStmt | ReturnStatement)* "nap"
+    Blocks = ":"  Indent (Stmt | ReturnStatement)* "nap"
     ReturnStatement     = "purr" Expression
     Expression = identifier + identifier |identifier identifier
   	
@@ -73,11 +84,12 @@ Kis {
     //IfStmt = "if" Exp Block ("else" Block)?
 
     
-   IfStmt = "if" Exp Block (ElseifPart* ElsePart?)?
-   ElsePart = "else" Block
-   ElseifPart = "elseif" Exp Block
+   IfStmt = if Exp Block (ElseifPart | ElsePart)? 
+   
+   ElseifPart = elseif Exp Block 
+   ElsePart = else Block
 
-
+   StringLiteral = "\"" (~"\"" any)* "\""
     
 
     
@@ -103,6 +115,9 @@ Kis {
              					| id                                                -- id
              					| Exp 
             					| "(" Exp ")"                                   -- paren_to_group
+                                | StringLiteral
+                                | CompareStrings
+                               
              
              
     if       				= "if" ~alnum
