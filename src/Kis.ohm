@@ -8,6 +8,7 @@ Kis {
                                 | ForStmt
                                 | WhileStmt
                                 | ClassDecl
+                                | BuiltInFunctions
     
     Assignment  	   = "set" id "=" Exp
     
@@ -35,6 +36,28 @@ Kis {
     ClassDecl			= class --NEEDS_TO_BE_COMPLETED
     
     Block 				   = ":" Stmt* "nap"
+    
+    
+    BuiltInFunctions    = "kitty" AddOrConcat  --builtin
+    
+    AddOrConcat = "addOrConcat" "(" paramList ")"  
+    
+    ForLoop             = "fur" identifier "in" identifier ":" Indent LoopBody* Dedent
+    LoopBody            = Stmt  // Adjust as necessary to include specific statements allowed inside loops
+
+    paramList = identifier "," identifier
+    identifier = letter | digit (letter | digit)*  --defining
+    Indent          = "    " // Assume 4 spaces for simplicity
+ 	Dedent          = "\n"  // Assume dedent is a newline for simplicity
+    Blocks = ":"  Indent (IfStmt | ReturnStatement)* "nap"
+    ReturnStatement     = "purr" Expression
+    Expression = identifier + identifier |identifier identifier
+  	
+    WhileLoop       = "whisker" (Expression | Exp | id) ":" Indent Stmt* "nap"
+    
+    
+    
+    
     
     IfStmt 					= if Exp Block else Block --ifelse
     							| if Exp Block else IfStmt --elseif
@@ -78,10 +101,3 @@ Kis {
     keyword  			  = if | elseif | else | for | while | class
     space      			   += "//" (~"\n" any)*                             --comment
 }
-
-
-
-
-
-
-
