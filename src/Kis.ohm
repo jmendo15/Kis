@@ -5,63 +5,58 @@ Kis {
                                 | FuncDecl
                                 | StructDecl
                                 | PrintStmt
-                                | IfStmt
                                 | ForStmt
                                 | WhileStmt
                                 | ClassDecl
                                 | BuiltInFunctions
                                 | IncrementStmt
                                 | ExpressionStmt
-                                | CompareStrings
+                                
                                 | BreakStmt
+                                | IfStmt
+                               
                                
                                 
     
     
-    Assignment  	   = "set" id "=" Exp
+    Assignment  	 	  = "set" id "=" Exp
     
         
-    StructDecl		   = "type" id Struct
-    Struct 			   = "{" id ":" Type "}"
+    StructDecl		 	  = "type" id Struct
+    Struct 			      = "{" id ":" Type "}"
     
-    FuncDecl    	   = "kitty" id Params Block "nap"
-    Params     		   = "(" ListOf<Param, ","> ")"
-    Param      		   = id (":" id)?
-    Type           			= Type "?"                                          --optional
-              		   			| "[" Type "]"                                  --array
-                       			| "(" ListOf<Type, ","> ")" "->" Type           --function
-                                | "isInt" "(" id ")"                            --isInt
-                  				| "isString" "(" id ")"                         --isString
-                      			| id                                            --id
+    FuncDecl    	      = "kitty" id Params Block "nap"
+    Params     		      = "(" ListOf<Param, ","> ")"
+    Param      		      = id (":" id)?
+    Type           		  = Type "?"                                          --optional
+              		   	  | "[" Type "]"                                  --array
+                          | "(" ListOf<Type, ","> ")" "->" Type           --function
+                          | "isInt" "(" id ")"                            --isInt
+                  		  | "isString" "(" id ")"                         --isString
+                          | id                                            --id
     
     PrintStmt   		  = "meow" "(" Exp ")"
     
-    ForStmt     		  = for ForExp Block 
-    ForExp      		  = id "in" id
-    
-    WhileStmt			= while Exp Block
     
     ClassDecl			= class --NEEDS_TO_BE_COMPLETED
-    
-    Block 				   = ":" Stmt* ("nap"| BreakStmt)
      
 
-
+    Block 				   = ":" Stmt*  ("nap"| BreakStmt)
+    IfStmt = if Exp Block (ElseifPart* ElsePart?)?
+    ElseifPart = elseif Exp Block
+    ElsePart = else Block
+    WhileStmt			= while Exp Block
+    ForStmt     		  = for ForExp Block 
+    ForExp      		  = id "in" id 
     
     
-    BuiltInFunctions    = "kitty" AddOrConcat  --builtin
+    BuiltInFunctions    = "kitty" AddOrConcat                               --builtin
     
     AddOrConcat = "addOrConcat" "(" paramList ")"  
     
-    //ForLoop             = "fur" identifier "in" identifier ":" Indent LoopBody* Dedent
-    
-
     
     
     
-    LoopBody         = Stmt | ExpressionStmt  // Adjust as necessary to include specific statements allowed inside loops
-    
-    // Embedding the pattern directly if integration issues persist
     CompareStrings = identifier "==" "\"" (~"\"" any)* "\""
   
     
@@ -79,15 +74,7 @@ Kis {
     Expression = identifier + identifier |identifier identifier
   	
     
-    
-    
-    //IfStmt = "if" Exp Block ("else" Block)?
-
-    
-   IfStmt = if Exp Block (ElseifPart | ElsePart)? 
    
-   ElseifPart = elseif Exp Block 
-   ElsePart = else Block
 
    StringLiteral = "\"" (~"\"" any)* "\""
     
@@ -96,6 +83,7 @@ Kis {
     Exp      				= ("-" | "!") Exp7                              -- unary
                                 | Exp1 "?" Exp1 ":" Exp                 -- ternary
                                 | Exp1
+  
     Exp1     			   = Exp1 "||" Exp2                                -- binary
     							| Exp1 "&&" Exp2  							 --addOrConcat
              					| Exp2
