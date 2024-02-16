@@ -1,3 +1,79 @@
-PLACE OHM GRAMMAR HERE
-MAKE IT IN OHM
+Kis {
+	Kis         = Stmt+
+    Stmt        = Assignment
+                | FuncDecl
+                | StructDecl
+                | PrintStmt
+                | IfStmt
+                | ForStmt
+                | WhileStmt
+                | ClassDecl
+    
+    Assignment  = "set" id "=" Exp
+    
+        
+    StructDecl = "type" id struct
+    struct = "{" id ":" Type "}" --NEED_TO_DECLARE_TYPE_SOMEWHERE
+    
+    FuncDecl    = "kitty" id Params Block "nap"
+    Params      = "(" ListOf<Param, ","> ")"
+    Param       = id (":" id)?
+    
+    PrintStmt   = "meow" "(" Exp ")"
+    
+    IfStmt 		= if Exp Block else Block
+    			| if Exp Block else IfStmt
+                | if Exp Block --FAILING_BECAUSE_OTHER_INSTANCES_ARE_5_THINGS_AND_THIS_IS_3
+    
+    ForStmt     = for ForExp Block
+    ForExp      = id "in" id
+    
+    WhileStmt   = while Exp Block
+    
+    ClassDecl   = class --NEEDS_TO_BE_COMPLETED
+    
+    Block    = ":" Stmt* "nap"
+    
+    Exp      = ("-" | "!") Exp7                              -- unary
+    		 | Exp1 "?" Exp1 ":" Exp                         -- ternary
+             | Exp1
+    Exp1     = Exp1 "||" Exp2                                -- binary
+             | Exp2
+    Exp2     = Exp2 "&&" Exp3                                -- binary
+             | Exp3
+    Exp3     = Exp4 ("<="|"<"|"=="|"!="|">="|">") Exp4       -- binary
+             | Exp4
+    Exp4     = Exp4 ("+" | "-") Exp5                         -- binary
+             | Exp5
+    Exp5     = Exp5 ("*" | "/" | "%") Exp6                   -- binary
+             | Exp6
+    Exp6     = Exp7 "**" Exp6                                -- binary
+             | Exp7
+    Exp7     = num
+             | true
+             | false
+             | id                                            -- id
+             | Exp 
+             
+             
+    if       = "if" ~alnum
+    elseif   = "elseif" ~alnum
+    else     = "else" ~alnum
+    for      = "fur" ~alnum
+    while    = "whisker" ~alnum
+    class    = "class" ~alnum   
+    num      = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
+    true     = "true" ~idchar
+    false    = "false" ~idchar
+    id       = ~keyword letter alnum*
+    idchar   = letter | digit | "_"
+    keyword  = if | elseif | else | for | while | class
+        
+}
+
+
+
+
+
+
 

@@ -4,7 +4,7 @@ kitty addOrConcat(a,b):
     if isInt(a) && isInt(b):
         purr a+b
     
-    elseif isString(a) && isString(b):
+    else if isString(a) && isString(b):
         purr a+b
 
     else:
