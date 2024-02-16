@@ -1,18 +1,23 @@
 Kis {
 	Kis						  = Stmt+
     Stmt		  		   	= Assignment
+                                
                                 | FuncDecl
                                 | StructDecl
                                 | PrintStmt
                                 | IfStmt
                                 | ForStmt
+                                
                                 | WhileStmt
                                 | ClassDecl
                                 | BuiltInFunctions
-                                | WhileLoop
+                               
                                 | IncrementStmt
+                                | ExpressionStmt
+                               
+                                
     
-    IncrementStmt 	   = id "++"
+    
     Assignment  	   = "set" id "=" Exp
     
         
@@ -46,8 +51,14 @@ Kis {
     AddOrConcat = "addOrConcat" "(" paramList ")"  
     
     ForLoop             = "fur" identifier "in" identifier ":" Indent LoopBody* Dedent
-    LoopBody            = Stmt  // Adjust as necessary to include specific statements allowed inside loops
-
+    
+    
+    
+    LoopBody         = Stmt | ExpressionStmt  // Adjust as necessary to include specific statements allowed inside loops
+    ExpressionStmt = Exp ";"
+    IncrementStmt 	   = id "++"
+    
+    
     paramList = identifier "," identifier
     identifier = letter | digit (letter | digit)*  --defining
     Indent          = "    " // Assume 4 spaces for simplicity
@@ -57,13 +68,18 @@ Kis {
     Expression = identifier + identifier |identifier identifier
   	
     
-    WhileLoop = "whisker" Exp ":" Indent Stmt* Dedent "nap"
     
     
+    //IfStmt = "if" Exp Block ("else" Block)?
+
     
-    IfStmt 					= if Exp Block else Block --ifelse
-    							| if Exp Block else IfStmt --elseif
-                				| if Exp Block --else
+   IfStmt = "if" Exp Block (ElseifPart* ElsePart?)?
+   ElsePart = "else" Block
+   ElseifPart = "elseif" Exp Block
+
+
+    
+
     
     Exp      				= ("-" | "!") Exp7                              -- unary
                                 | Exp1 "?" Exp1 ":" Exp                 -- ternary
