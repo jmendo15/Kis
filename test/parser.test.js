@@ -12,32 +12,35 @@ import parse from "../src/parser.js"
 //Code that Kis should compile
 // Must be of form [scenario, source_code]
 const syntaxChecks = [
-    // ["all numeric literal forms", "print(8 * 89.123);"],
-    // ["complex expressions", "print(83 * ((((-((((13 / 21)))))))) + 1 - 0);"],
-    // ["all unary operators", "print (-3); print (!false);"],
-    // ["all binary operators", "print x && y || z * 1 / 2 ** 3 + 4 < 5;"],
-    // ["all arithmetic operators", "let x = (!3) * 2 + 4 - (-7.3) * 8 ** 13 / 1;"],
-    // ["all relational operators", "let x = 1<(2<=(3==(4!=(5 >= (6>7)))));"],
-    // ["all logical operators", "let x = true && false || (!false);"],
-    // ["the conditional operator", "print x ? y : z;"],
-    // ["end of program inside comment", "print(0); // yay"],
-    // ["comments with no text are ok", "print(1);//\nprint(0);//"],
-    // ["non-Latin letters in identifiers", "コンパイラ = 100;"],
+    ["variable declaration", "set variable = 3"],
+    ["print statement", "meow(hi)"],
+    ["while statement", "whisker x < 3: meow(hello) nap"],
+    ["if statement", "if x < 3 meow(hello) nap"],
+    ["if with else", "if x < 3 meow(hello) else meow(goodbye)"],
+    ["function declaration", "kitty func(parameter: String) meow(hi) purr 0 nap"],
+    ["all logical operators", "set x = true && false || (!false)"],
+    ["ternary operator", "meow( x ? y : z)"],
+    ["comments", "meow(0) // comment"],
+    ["for loop", "fur cat in cats: meow(cap) nap"],
+    ["modularity import", "import package_example"],
+    ["modularity export", "module package_example export kitty addition(a: int, b: int): purr a + b nap"]
 ]
 
 //Code that Kis should NOT compile
 // Must be of form [scenario, source_code, errorMessagePattern]
 const syntaxErrors = [
-    // ["non-letter in an identifier", "ab😭c = 2", /Line 1, col 3/],
-    // ["malformed number", "x= 2.", /Line 1, col 6/],
-    // ["missing semicolon", "x = 3 y = 1", /Line 1, col 7/],
-    // ["a missing right operand", "print(5 -", /Line 1, col 10/],
-    // ["a non-operator", "print(7 * ((2 _ 3)", /Line 1, col 15/],
-    // ["an expression starting with a )", "x = );", /Line 1, col 5/],
-    // ["a statement starting with expression", "x * 5;", /Line 1, col 3/],
-    // ["an illegal statement on line 2", "print(5);\nx * 5;", /Line 2, col 3/],
-    // ["a statement starting with a )", "print(5);\n) * 5", /Line 2, col 1/],
-    // ["an expression starting with a *", "x = * 71;", /Line 1, col 5/],
+    ["wrong variable declaration", "let variable = 3", /Line 1, col 1/],
+    ["wrong print statement", "print(hi)", /Line 1, col 1/],
+    ["wrong while statement", "while x < 3: meow(hello)", /Line 1, col 1/],
+    ["wrong if statement", "incase x < 3 meow(hello) sleep", /Line 1, col 1/],
+    ["wrong if with else", "if x < 3 meow(hello) orelse meow(goodbye)", /Line 1, col 6/],
+    ["function declaration without type declaration", "kitty func(parameter) meow(hi) purr 0 nap", /Line 1 col 3/],
+    ["different all logical operators", "set x = true and false or (!false)", /Line 1 col 5/],
+    ["wrong ternary operator and too many params in print statement", "meow( x question y colon z)", /Line 1 col 2/],
+    ["comments with pound symbol ", "meow(0) #comment", /Line 1 col 3/],
+    ["wrong for loop", "for cat in cats: meow(cap) nap", /Line 1 col 1/],
+    ["wrong modularity import", "importing package_example", /Line 1 col 1/],
+    ["wrong modularity export", "module package_example mail kitty addition(a: int, b: int): purr a + b", /Line 1 col 3/]
 ]
 
 describe("The parser", () => {

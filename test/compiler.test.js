@@ -1,6 +1,5 @@
 import assert from "node:assert/strict"
 import compile from "../src/compiler.js"
-import { Program } from "../src/core.js"
 
 const sampleProgram = "print(0);"
 
