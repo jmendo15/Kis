@@ -1,4 +1,6 @@
 //Core.js creates classes for syntax to prepare for static analysis
+// !TODO: will need to be added to for Kis
+
 export class Kis {
     constructor(Stmts) {
         this.Stmts = Stmts
