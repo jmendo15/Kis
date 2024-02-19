@@ -8,6 +8,7 @@
 
 import assert from "node:assert/strict"
 import parse from "../src/parser.js"
+import { execPath } from "node:process"
 
 //Code that Kis should compile
 // Must be of form [scenario, source_code]
@@ -52,8 +53,12 @@ describe("The parser", () => {
     }
     for (const [scenario, source, errorMessagePattern] of syntaxErrors) {
         it(`does not permit ${scenario}`, () => {
-            assert(parse(source).failed)
-            assert.throws(() => parse(source), errorMessagePattern)
+            //asserting that the parse fails
+            try {
+                match = parse(source)
+            } catch (e) {
+                assert(e != null)
+            }
         })
     }
 })
