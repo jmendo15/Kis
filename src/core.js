@@ -48,3 +48,9 @@ export class Function {
     }
 }
 
+export class BuiltInFunctions {
+    constructor(names, parameterCount) {
+        Object.assign(this, { names, parameterCount })
+    }
+}
+
