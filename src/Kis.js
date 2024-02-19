@@ -3,8 +3,7 @@
 import parse from "./parser.js"
 import * as fs from "node:fs/promises"
 
-const help = `Kis compiler for homework 2, not enough arguments given.
-    `
+const help = `Kis compiler for homework 2, not enough arguments given.`
 
 async function HW2Function(file) {
     try {
