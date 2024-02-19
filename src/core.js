@@ -1,5 +1,4 @@
-import { alt } from "joi"
-
+//Core.js creates classes for syntax to prepare for static analysis
 export class Kis {
     constructor(Stmts) {
         this.Stmts = Stmts
@@ -36,3 +35,16 @@ export class BreakStmt {
 
     }
 }
+
+export class Variable {
+    consturctor(name) {
+        Object.assign(this, { name })
+    }
+}
+
+export class Function {
+    constructor(name, params, body) {
+        Object.assign(this, { name, params, body })
+    }
+}
+
