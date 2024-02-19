@@ -42,7 +42,7 @@ Kis {
      
 
     Block 				   = ":" Stmt*  ("nap"| BreakStmt)
-    IfStmt = if Exp Block (ElseifPart* ElsePart?)?
+    IfStmt = if Exp Block (ElseifPart* ElsePart)?
     ElseifPart = elseif Exp Block
     ElsePart = else Block
     WhileStmt			= while Exp Block
