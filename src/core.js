@@ -54,3 +54,14 @@ export class BuiltInFunctions {
     }
 }
 
+export class BinaryExpression {
+    constructor(operator, left, right) {
+        Object.assign(this, { operator, left, right })
+    }
+}
+
+export class UnaryExpression {
+    constructor(operator, left, right) {
+        Object.assign(this, { operator, left, right })
+    }
+}
