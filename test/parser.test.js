@@ -17,7 +17,7 @@ const syntaxChecks = [
     ["while statement", "whisker x < 3: meow(hello) nap"],
     ["if statement", "if x < 3: meow(hello) nap"],
     ["if with else", "if x < 3: meow(hello) else: meow(goodbye)"],
-    ["function declaration", "kitty func(parameter: String) meow(hi) purr 0 nap"],
+    ["function declaration", "kitty func(parameter: String): meow(hi) purr 0 nap"],
     ["all logical operators", "set x = true && false || (!false)"],
     ["ternary operator", "meow( x ? y : z)"],
     ["comments", "meow(0) // comment"],
