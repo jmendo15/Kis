@@ -52,6 +52,7 @@ describe("The parser", () => {
     }
     for (const [scenario, source, errorMessagePattern] of syntaxErrors) {
         it(`does not permit ${scenario}`, () => {
+            assert(parse(source).failed)
             assert.throws(() => parse(source), errorMessagePattern)
         })
     }
