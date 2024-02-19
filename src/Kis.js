@@ -1,35 +1,23 @@
 #! /usr/bin/env node
 
+import parse from "./parser.js"
 import * as fs from "node:fs/promises"
-import process from "process"
-import compile from "./compiler.js"
-import stringify from "graph-stringify"
 
-const help = `Kis compiler
+const help = `Kis compiler for homework 2, not enough arguments given.
+    `
 
-Syntax: Kis <filename> <outputType>
-
-Prints to stdout according to <outputType>, which must be one of:
-
-  parsed     a message that the program was matched ok by the grammar
-  analyzed   the statically analyzed representation
-  optimized  the optimized semantically analyzed representation
-  js         the translation to JavaScript
-`
-
-async function compileFromFile(filename, outputType) {
+async function HW2Function(file) {
     try {
-        const buffer = await fs.readFile(filename)
-        const compiled = compile(buffer.toString(), outputType)
-        console.log("syntax is ok:", stringify(compiled))
+        const buffer = await fs.readFile(file)
+        const match = parse(buffer.toString())
+        console.log("Syntax is ok")
     } catch (e) {
-        console.error(`\u001b[31m${e}\u001b[39m`)
-        process.exitCode = 1
+        console.log(e.message)
     }
 }
 
-if (process.argv.length !== 4) {
+if (process.argv.length !== 3) {
     console.log(help)
 } else {
-    compileFromFile(process.argv[2], process.argv[3])
+    HW2Function(process.argv[2])
 }
