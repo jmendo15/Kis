@@ -30,6 +30,7 @@ const syntaxChecks = [
 //Code that Kis should NOT compile
 // Must be of form [scenario, source_code, errorMessagePattern]
 const syntaxErrors = [
+    ["variable declaration", "set variable = 3", /Line 1, col 1/],
     ["wrong variable declaration", "let variable = 3", /Line 1, col 1/],
     ["wrong print statement", "print(hi)", /Line 1, col 1/],
     ["wrong while statement", "while x < 3: meow(hello)", /Line 1, col 1/],
@@ -52,7 +53,6 @@ describe("The parser", () => {
     }
     for (const [scenario, source, errorMessagePattern] of syntaxErrors) {
         it(`does not permit ${scenario}`, () => {
-            //all tests are failing but assertion is wrong
             assert.throws(() => parse(source), errorMessagePattern)
         })
     }
