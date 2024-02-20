@@ -8,7 +8,7 @@
 
 import assert from "node:assert/strict"
 import parse from "../src/parser.js"
-import { match } from "node:assert"
+import { errorMonitor } from "node:events"
 
 //Code that Kis should compile
 // Must be of form [scenario, source_code]
@@ -48,14 +48,12 @@ describe("The parser", () => {
     for (const [scenario, source] of syntaxChecks) {
         it(`properly specifies ${scenario}`, () => {
             assert(parse(source).succeeded())
-            console.log("Syntax is ok")
         })
     }
     for (const [scenario, source, errorMessagePattern] of syntaxErrors) {
         it(`does not permit ${scenario}`, () => {
-            //asserting that the parse fail
-            let err = parse(source)
-            assert.throws(() => parse(source), Error(err.message), err.message)
+            //all tests are failing but assertion is wrong
+            assert.throws(() => parse(source), errorMessagePattern)
         })
     }
 })
