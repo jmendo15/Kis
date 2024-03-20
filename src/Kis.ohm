@@ -1,124 +1,103 @@
 Kis {
-	Kis						  = Stmt+
-    Stmt		  		   	= Assignment
-                                
-                                | FuncDecl
-                                | StructDecl
-                                | PrintStmt
-                                | ForStmt
-                                | WhileStmt
-                                | ClassDecl
-                                | BuiltInFunctions
-                                | IncrementStmt
-                                | ExpressionStmt
-                                
-                                | BreakStmt
-                                | IfStmt
-                               
-                               
-                                
-    
-    
-    Assignment  	 	  = "set" id "=" Exp
-    
-        
-    StructDecl		 	  = "type" id Struct
-    Struct 			      = "{" id ":" Type "}"
-    
-    FuncDecl    	      = "kitty" id Params Block "nap"
-    Params     		      = "(" ListOf<Param, ","> ")"
-    Param      		      = id (":" id)?
-    Type           		  = Type "?"                                          --optional
-              		   	  | "[" Type "]"                                  --array
-                          | "(" ListOf<Type, ","> ")" "->" Type           --function
-                          | "isInt" "(" id ")"                            --isInt
-                  		  | "isString" "(" id ")"                         --isString
-                          | id                                            --id
-    
-    PrintStmt   		  = "meow" "(" Exp ")"
-    
-    
-    ClassDecl			= class --NEEDS_TO_BE_COMPLETED
-     
+	Kis         = Stmt+ | Module
 
-    Block 				   = ":" Stmt*  ("nap"| BreakStmt)
-    IfStmt = if Exp Block (ElseifPart* ElsePart)?
-    ElseifPart = elseif Exp Block
-    ElsePart = else Block
-    WhileStmt			= while Exp Block
-    ForStmt     		  = for ForExp Block 
-    ForExp      		  = id "in" id 
+    Module      = module id Export* "nap"
+
+    Export      = export FuncDecl
+
+    Stmt        = Assignment
+                | FuncDecl
+                | StructDecl
+                | ReturnStatement
+                | PrintStmt
+                | ForStmt
+                | WhileStmt
+                | ClassDecl
+                | IncrementStmt
+                | BreakStmt
+                | IfStmt
+                | ImportStmt
     
+    Assignment  = "set" id "=" Exp
+    StructDecl  = "type" id Struct
+    Struct      = "{" id ":" Type "}"
     
-    BuiltInFunctions    = "kitty" AddOrConcat                               --builtin
+    FuncDecl    = kitty id Params Block
+    Params      = "(" ListOf<Param, ","> ")"
+    Param       = id ":" id?
+    Type        = Type "?"                                   --optional
+                | "[" Type "]"                               --array
+                | "(" ListOf<Type, ","> ")" "->" Type        --function
+                | "isInt" "(" id ")"                         --isInt
+                | "isString" "(" id ")"                      --isString
+                | id                                         --id
     
-    AddOrConcat = "addOrConcat" "(" paramList ")"  
+    PrintStmt   = "meow" "(" Exp ")"
+
+    ClassDecl   = class --NEEDS_TO_BE_COMPLETED
+
+    Block       = ":" Stmt* "nap"
+    IfStmt      = if Exp ":" Stmt* else (Block | IfStmt)     --long
+                | if Exp Block                               --short
+    WhileStmt   = while Exp Block
+    ForStmt     = for id in Exp Block
+    ImportStmt  = import id
+
+    CompareStrings   = identifier "==" "\"" (~"\"" any)* "\""
+    IncrementStmt    = Exp7 ("++" |"--")                     --pounce
+    BreakStmt        = break
     
+    paramList        = identifier "," identifier
+    identifier       = letter | digit (letter | digit)*  --defining
+    ReturnStatement  = return Exp
+
+    StringLiteral    = "\"" (~"\"" any)* "\""
     
-    
-    
-    CompareStrings = identifier "==" "\"" (~"\"" any)* "\""
+    Exp          = ("-" | "!") Exp7                            --unary
+                 | Exp1 "?" Exp1 ":" Exp                       --ternary
+                 | Exp1
   
-    
-    
-    ExpressionStmt = Exp ";"
-    IncrementStmt 	   = id "++"
-    BreakStmt = "break"
-    
-    paramList = identifier "," identifier
-    identifier = letter | digit (letter | digit)*  --defining
-    Indent          = "    " // Assume 4 spaces for simplicity
- 	Dedent          = "\n"  // Assume dedent is a newline for simplicity
-    Blocks = ":"  Indent (Stmt | ReturnStatement)* "nap"
-    ReturnStatement     = "purr" Expression
-    Expression = identifier + identifier |identifier identifier
-  	
-    
-   
-
-   StringLiteral = "\"" (~"\"" any)* "\""
-    
-
-    
-    Exp      				= ("-" | "!") Exp7                              -- unary
-                                | Exp1 "?" Exp1 ":" Exp                 -- ternary
-                                | Exp1
-  
-    Exp1     			   = Exp1 "||" Exp2                                -- binary
-    							| Exp1 "&&" Exp2  							 --addOrConcat
-             					| Exp2
-    Exp2     			   = Exp2 "&&" Exp3                                -- binary
-             					| Exp3
-    Exp3				   = Exp4 ("<="|"<"|"=="|"!="|">="|">") Exp4       -- binary
-             					| Exp4
-    Exp4     			   = Exp4 ("+" | "-") Exp5                         -- binary
-             					| Exp5
-    Exp5     			   = Exp5 ("*" | "/" | "%") Exp6                   -- binary
-             					| Exp6
-    Exp6     			   = Exp7 "**" Exp6                                -- binary
-             					| Exp7
-    Exp7     			   = num
-             					| true
-             					| false
-             					| id                                                -- id
-             					| Exp 
-            					| "(" Exp ")"                                   -- paren_to_group
-                                | StringLiteral
-                                | CompareStrings
-                               
+    Exp1         = Exp1 "||" Exp2                               --binary
+                 | Exp1 "&&" Exp2  			      --addOrConcat
+             	 | Exp2
+    Exp2         = Exp2 "&&" Exp3                               --binary
+             	 | Exp3
+    Exp3         = Exp4 ("<="|"<"|"=="|"!="|">="|">") Exp4         --binary
+             	 | Exp4
+    Exp4         = Exp4 ("+" | "-") Exp5                --binary
+                 | Exp5
+    Exp5         = Exp5 ("*" | "/" | "%") Exp6          --binary
+                 | Exp6
+    Exp6         = Exp7 "**" Exp6                       --binary
+                 | Exp7
+    Exp7         = num
+                 | true
+                 | false
+                 | id                                 --id
+                 | "(" Exp ")"                        --parens
+                 | StringLiteral
              
-             
-    if       				= "if" ~alnum
-    elseif   				= "elseif" ~alnum
-    else     				= "else" ~alnum
-    for      				= "fur" ~alnum
-    while					= "whisker" ~alnum
-    class					= "class" ~alnum   
-    num					    = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
-    true					= "true" ~idchar
-    false					= "false" ~idchar
-    id						= ~keyword letter alnum*
-    idchar   				= letter | digit | "_"
-    keyword  			    = if | elseif | else | for | while | class
-    space      			   += "//" (~"\n" any)*                             --comment
+    if           = "if" ~alnum
+    in           = "in" ~alnum
+    elseif       = "elseif" ~alnum
+    else         = "else" ~alnum
+    for          = "fur" ~alnum
+    while        = "whisker" ~alnum
+    class        = "class" ~alnum 
+    import       = "import" ~alnum 
+    export       = "export" ~alnum 
+    module       = "module" ~alnum 
+    increment    = "pounce" ~alnum
+    break        = "break" ~alnum
+    return       = "purr" ~alnum
+    endkw        = "nap" ~alnum
+    kitty        = "kitty" ~alnum
+    num	         = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
+    true	     = "true" ~idchar
+    false        = "false" ~idchar
+    id           = ~keyword letter alnum*
+    idchar       = letter | digit | "_"
+    keyword      = if | elseif | else | for | while | class | return
+                 | module | export | import | endkw
+    space       += "//" (~"\n" any)*                             --comment
 }
