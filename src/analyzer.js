@@ -278,17 +278,64 @@
         return core.ternary(condition, trueBranch, falseBranch, trueBranch.type);
       },
 
-      Exp1_binary(exp, _ops, exps) {
-        let left = exp.rep()
-        mustHaveBooleanType(left, { at: exp })
-        for (let e of exps.children) {
-          let right = e.rep()
-          mustHaveBooleanType(right, { at: e })
-          left = core.binary("||", left, right, BOOLEAN)
-        }
-        return left
+      Exp_unary(op, exp) {
+        return core.unary(op.sourceString, exp.rep())
       },
-    })
+  
+      Exp_ternary(exp1, _questionMark, exp2, _colon, exp3) {
+        return core.conditional(exp1.rep(), exp2.rep(), exp3.rep())
+      },
+  
+      Exp1_binary(exp1, op, exp2) {
+        return core.binary(op.sourceString, exp1.rep(), exp2.rep())
+      },
+  
+      Exp2_binary(exp1, op, exp2) {
+        return core.binary(op.sourceString, exp1.rep(), exp2.rep())
+      },
+  
+      Exp3_binary(exp1, op, exp2) {
+        return core.binary(op.sourceString, exp1.rep(), exp2.rep())
+      },
+  
+      Exp4_binary(exp1, op, exp2) {
+        return core.binary(op.sourceString, exp1.rep(), exp2.rep())
+      },
+  
+      Exp5_binary(exp1, op, exp2) {
+        return core.binary(op.sourceString, exp1.rep(), exp2.rep())
+      },
+  
+      Exp6_binary(exp1, op, exp2) {
+        return core.binary(op.sourceString, exp1.rep(), exp2.rep())
+      },
 
-      // Exp1_addOrConcat() 
-      // Handle addOrConcat in the core.js
+      Exp7_id(id){
+        const entity = context.lookup(id.sourceString)
+        musthavebeenfound(entity, id.sourceString, { at: id })
+        mustHaveBeenFound(entity, { at:id })
+        return entity
+      },
+
+      Exp7_exp(exp) {
+        return exp.rep();
+      },
+
+      Exp7_parens(_open, exp, _clone) {
+        return exp.rep()
+      },
+
+      true(_) {
+        return true
+      },
+
+      false(_) {
+        return false
+      },
+      
+      Exp7_stringliteral(_left, sl, _right){
+        let rawString = sl.sourceString
+        let content = rawString.slice(1, rawString.length - 1);
+        let unescapedContent = content.replace(/\\"/g, '"')
+        return unescapedContent
+      }})

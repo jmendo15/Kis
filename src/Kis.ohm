@@ -89,7 +89,7 @@ Kis {
              					| false
              					| id                                 --id
              					| Exp 
-            					| "(" Exp ")"                        --paren_to_group
+            					| "(" Exp ")"                        --parens
                            | StringLiteral
                                
              
