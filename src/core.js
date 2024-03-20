@@ -1,69 +1,186 @@
-//Core.js creates classes for syntax to prepare for static analysis
-// !TODO: will need to be added to for Kis
-
-export class Kis {
-    constructor(Stmts) {
-        this.Stmts = Stmts
-    }
+export function script(statements) {
+  return { kind: "Script", statements };
 }
 
-export class Assignment {
-    constructor(target, source) {
-        Object.assign(this, { target, source })
-    }
+export function module(name, exports) {
+  return { kind: "Module", name, exports };
 }
 
-export class PrintStmt {
-    constructor(argument) {
-        this.argment = argument
-    }
+export function variableDeclaration(variable, initializer) {
+  return { kind: "VariableDeclaration", variable, initializer };
 }
 
-export class IfStmt {
-    constructor(test, consequent, alternate) {
-        Object.assign(this, { test, consequent, alternate })
-    }
+export function variable(name, type) {
+  return { kind: "Variable", name, type };
 }
 
-export class WhileStmt {
-    constructor() {
-
-    }
-
+export function typeDeclaration(type) {
+  return { kind: "TypeDeclaration", type };
 }
 
-export class BreakStmt {
-    constructor() {
+export const boolType = { kind: "BoolType" };
+export const intType = { kind: "IntType" };
+export const floatType = { kind: "FloatType" };
+export const stringType = { kind: "StringType" };
+export const voidType = { kind: "VoidType" };
+export const anyType = { kind: "AnyType" };
 
-    }
+export function structType(name, fields) {
+  return { kind: "StructType", name, fields };
 }
 
-export class Variable {
-    consturctor(name) {
-        Object.assign(this, { name })
-    }
+export function field(name, type) {
+  return { kind: "Field", name, type };
 }
 
-export class Function {
-    constructor(name, params, body) {
-        Object.assign(this, { name, params, body })
-    }
+export function functionDeclaration(fun, params, body) {
+  return { kind: "FunctionDeclaration", fun, params, body };
 }
 
-export class BuiltInFunctions {
-    constructor(names, parameterCount) {
-        Object.assign(this, { names, parameterCount })
-    }
+export function fun(name, type) {
+  return { kind: "Function", name, type };
 }
 
-export class BinaryExpression {
-    constructor(operator, left, right) {
-        Object.assign(this, { operator, left, right })
-    }
+export function arrayType(baseType) {
+  return { kind: "ArrayType", baseType };
 }
 
-export class UnaryExpression {
-    constructor(operator, left, right) {
-        Object.assign(this, { operator, left, right })
-    }
+export function functionType(paramTypes, returnType) {
+  return { kind: "FunctionType", paramTypes, returnType };
 }
+
+export function optionalType(baseType) {
+  return { kind: "OptionalType", baseType };
+}
+
+export function printStatement(expression) {
+  return { kind: "PrintStatement", expression };
+}
+
+export function increment(variable) {
+  return { kind: "Increment", variable };
+}
+
+export function decrement(variable) {
+  return { kind: "Decrement", variable };
+}
+
+export function assignment(target, source) {
+  return { kind: "Assignment", target, source };
+}
+
+export const breakStatement = { kind: "BreakStatement" };
+
+export function returnStatement(expression) {
+  return { kind: "ReturnStatement", expression };
+}
+
+export function shortReturnStatement() {
+  return { kind: "ShortReturnStatement" };
+}
+
+export function ifStatement(test, consequent, alternate) {
+  return { kind: "IfStatement", test, consequent, alternate };
+}
+
+export function shortIfStatement(test, consequent) {
+  return { kind: "ShortIfStatement", test, consequent };
+}
+
+export function whileStatement(test, body) {
+  return { kind: "WhileStatement", test, body };
+}
+
+export function repeatStatement(count, body) {
+  return { kind: "RepeatStatement", count, body };
+}
+
+export function forRangeStatement(iterator, low, op, high, body) {
+  return { kind: "ForRangeStatement", iterator, low, op, high, body };
+}
+
+export function forStatement(iterator, collection, body) {
+  return { kind: "ForStatement", iterator, collection, body };
+}
+
+export function conditional(test, consequent, alternate, type) {
+  return { kind: "Conditional", test, consequent, alternate, type };
+}
+
+export function binary(op, left, right, type) {
+  return { kind: "BinaryExpression", op, left, right, type };
+}
+
+export function unary(op, operand, type) {
+  return { kind: "UnaryExpression", op, operand, type };
+}
+
+export function emptyOptional(baseType) {
+  return { kind: "EmptyOptional", baseType, type: optionalType(baseType) };
+}
+
+export function subscript(array, index) {
+  return {
+    kind: "SubscriptExpression",
+    array,
+    index,
+    type: array.type.baseType,
+  };
+}
+
+export function arrayExpression(elements) {
+  return {
+    kind: "ArrayExpression",
+    elements,
+    type: arrayType(elements[0].type),
+  };
+}
+
+export function emptyArray(type) {
+  return { kind: "EmptyArray", type };
+}
+
+export function memberExpression(object, op, field) {
+  return { kind: "MemberExpression", object, op, field, type: field.type };
+}
+
+export function functionCall(callee, args) {
+  return { kind: "FunctionCall", callee, args, type: callee.type.returnType };
+}
+
+export function constructorCall(callee, args) {
+  return { kind: "ConstructorCall", callee, args, type: callee };
+}
+
+// These local constants are used to simplify the standard library definitions.
+const floatToFloatType = functionType([floatType], floatType);
+const floatFloatToFloatType = functionType([floatType, floatType], floatType);
+const stringToIntsType = functionType([stringType], arrayType(intType));
+const anyToVoidType = functionType([anyType], voidType);
+
+export const standardLibrary = Object.freeze({
+  int: intType,
+  float: floatType,
+  boolean: boolType,
+  string: stringType,
+  void: voidType,
+  any: anyType,
+  π: variable("π", true, floatType),
+  print: fun("print", anyToVoidType),
+  sin: fun("sin", floatToFloatType),
+  cos: fun("cos", floatToFloatType),
+  exp: fun("exp", floatToFloatType),
+  ln: fun("ln", floatToFloatType),
+  hypot: fun("hypot", floatFloatToFloatType),
+  bytes: fun("bytes", stringToIntsType),
+  codepoints: fun("codepoints", stringToIntsType),
+});
+
+// We want every expression to have a type property. But we aren't creating
+// special entities for numbers, strings, and booleans; instead, we are
+// just using JavaScript values for those. Fortunately we can monkey patch
+// the JS classes for these to give us what we want.
+String.prototype.type = stringType;
+Number.prototype.type = floatType;
+BigInt.prototype.type = intType;
+Boolean.prototype.type = boolType;

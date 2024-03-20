@@ -1,7 +1,6 @@
 Kis {
-	Kis         = Stmt+ | Module
-
-    Module      = module id Export* "nap"
+	Kis         = Stmt+                    -- script
+                | module id Export* "nap"  -- module
 
     Export      = export FuncDecl
 
@@ -12,15 +11,14 @@ Kis {
                 | PrintStmt
                 | ForStmt
                 | WhileStmt
-                | ClassDecl
                 | IncrementStmt
                 | BreakStmt
                 | IfStmt
                 | ImportStmt
     
-    Assignment  = "set" id "=" Exp
-    StructDecl  = "type" id Struct
-    Struct      = "{" id ":" Type "}"
+    Assignment  = set id "=" Exp
+    StructDecl  = house id "{" Field* "}"
+    Field       = id ":" Type
     
     FuncDecl    = kitty id Params Block
     Params      = "(" ListOf<Param, ","> ")"
@@ -34,49 +32,41 @@ Kis {
     
     PrintStmt   = "meow" "(" Exp ")"
 
-    ClassDecl   = class --NEEDS_TO_BE_COMPLETED
-
-    Block       = ":" Stmt* "nap"
-    IfStmt      = if Exp ":" Stmt* else (Block | IfStmt)     --long
-                | if Exp Block                               --short
-    WhileStmt   = while Exp Block
-    ForStmt     = for id in Exp Block
-    ImportStmt  = import id
-
-    CompareStrings   = identifier "==" "\"" (~"\"" any)* "\""
+    Block            = ":" Stmt* "nap"
+    IfStmt           = if Exp ":" Stmt* else (Block | IfStmt)     --long
+                     | if Exp Block                               --short
+    WhileStmt        = while Exp Block
+    ForStmt          = for id in Exp Block
+    ImportStmt       = import id
     IncrementStmt    = Exp7 ("++" |"--")                     --pounce
     BreakStmt        = break
-    
-    paramList        = identifier "," identifier
-    identifier       = letter | digit (letter | digit)*  --defining
     ReturnStatement  = return Exp
-
-    StringLiteral    = "\"" (~"\"" any)* "\""
     
     Exp          = ("-" | "!") Exp7                            --unary
                  | Exp1 "?" Exp1 ":" Exp                       --ternary
                  | Exp1
   
-    Exp1         = Exp1 "||" Exp2                               --binary
-                 | Exp1 "&&" Exp2  			      --addOrConcat
-             	 | Exp2
-    Exp2         = Exp2 "&&" Exp3                               --binary
-             	 | Exp3
-    Exp3         = Exp4 ("<="|"<"|"=="|"!="|">="|">") Exp4         --binary
-             	 | Exp4
-    Exp4         = Exp4 ("+" | "-") Exp5                --binary
-                 | Exp5
-    Exp5         = Exp5 ("*" | "/" | "%") Exp6          --binary
-                 | Exp6
-    Exp6         = Exp7 "**" Exp6                       --binary
-                 | Exp7
-    Exp7         = num
-                 | true
-                 | false
-                 | id                                 --id
-                 | "(" Exp ")"                        --parens
-                 | StringLiteral
-             
+    Exp1          = Exp1 "||" Exp2                               --binary
+                  | Exp1 "&&" Exp2  			      --addOrConcat
+             	  | Exp2
+    Exp2          = Exp2 "&&" Exp3                               --binary
+             	  | Exp3
+    Exp3          = Exp4 ("<="|"<"|"=="|"!="|">="|">") Exp4         --binary
+             	  | Exp4
+    Exp4           = Exp4 ("+" | "-") Exp5                --binary
+                  | Exp5
+    Exp5          = Exp5 ("*" | "/" | "%") Exp6          --binary
+                  | Exp6
+    Exp6          = Exp7 "**" Exp6                       --binary
+                  | Exp7
+    Exp7          = num
+                  | true
+                  | false
+                  | id                                 --id
+                  | "(" Exp ")"                        --parens
+                  | stringLiteral
+    stringLiteral = "\"" (~"\"" any)* "\""
+
     if           = "if" ~alnum
     in           = "in" ~alnum
     elseif       = "elseif" ~alnum
@@ -92,6 +82,8 @@ Kis {
     return       = "purr" ~alnum
     endkw        = "nap" ~alnum
     kitty        = "kitty" ~alnum
+    set          = "set" ~alnum
+    house        = "house" ~alnum
     num	         = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
     true	     = "true" ~idchar
     false        = "false" ~idchar
