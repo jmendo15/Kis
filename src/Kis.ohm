@@ -27,7 +27,7 @@ Kis {
     Params      = "(" ListOf<Param, ","> ")"
     Param       = id ":" id?
     Type        = Type "?"                                      --optional
-              	 | "[" Type "]"                                  --array
+                | "[" Type "]"                                  --array
                 | "(" ListOf<Type, ","> ")" "->" Type           --function
                 | "isInt" "(" id ")"                            --isInt
                 | "isString" "(" id ")"                         --isString
@@ -36,63 +36,54 @@ Kis {
     PrintStmt   = "meow" "(" Exp ")"
     
     
-    ClassDecl	 = class --NEEDS_TO_BE_COMPLETED
+    ClassDecl   = class --NEEDS_TO_BE_COMPLETED
      
 
-    Block          = ":" Stmt* "nap"
-    IfStmt         = if Exp ":" Stmt* else (Block | IfStmt)     --long
-                   | if Exp Block                               --short
-    WhileStmt      = while Exp Block
-    ForStmt        = for id in Exp Block
-    ImportStmt     = import id
+    Block       = ":" Stmt* "nap"
+    IfStmt      = if Exp ":" Stmt* else (Block | IfStmt)     --long
+                | if Exp Block                               --short
+    WhileStmt   = while Exp Block
+    ForStmt     = for id in Exp Block
+    ImportStmt  = import id
     
     
-    BuiltInFunctions  = "kitty" AddOrConcat                     --builtin
+    BuiltInFunctions = "kitty" AddOrConcat                     --builtin
     
-    AddOrConcat = "addOrConcat" "(" paramList ")"  
-    
-    
-    
-    
-    CompareStrings = identifier "==" "\"" (~"\"" any)* "\""
-  
-    
-    
-    IncrementStmt 	   = Exp7 ("++" |"--")                    --pounce
-    BreakStmt          = break
-    
-    paramList = identifier "," identifier
-    identifier = letter | digit (letter | digit)*  --defining
-    ReturnStatement     = return Exp
+    AddOrConcat      = "addOrConcat" "(" paramList ")"  
 
-    StringLiteral = "\"" (~"\"" any)* "\""
+    CompareStrings   = identifier "==" "\"" (~"\"" any)* "\""
+    IncrementStmt    = Exp7 ("++" |"--")                    --pounce
+    BreakStmt        = break
+    
+    paramList        = identifier "," identifier
+    identifier       = letter | digit (letter | digit)*  --defining
+    ReturnStatement  = return Exp
+
+    StringLiteral    = "\"" (~"\"" any)* "\""
     
     Exp          = ("-" | "!") Exp7                            --unary
                  | Exp1 "?" Exp1 ":" Exp                       --ternary
                  | Exp1
   
-    Exp1     	 = Exp1 "||" Exp2                               --binary
-    			    | Exp1 "&&" Exp2  							         --addOrConcat
+    Exp1         = Exp1 "||" Exp2                               --binary
+                 | Exp1 "&&" Exp2  							         --addOrConcat
              	 | Exp2
-    Exp2     	 = Exp2 "&&" Exp3                               --binary
+    Exp2         = Exp2 "&&" Exp3                               --binary
              	 | Exp3
-    Exp3		 = Exp4 ("<="|"<"|"=="|"!="|">="|">") Exp4         --binary
-             					| Exp4
-    Exp4     			   = Exp4 ("+" | "-") Exp5                --binary
-             					| Exp5
-    Exp5     			   = Exp5 ("*" | "/" | "%") Exp6          --binary
-             					| Exp6
-    Exp6     			   = Exp7 "**" Exp6                       --binary
-             					| Exp7
-    Exp7     			   = num
-             					| true
-             					| false
-             					| id                                 --id
-             					| Exp 
-            					| "(" Exp ")"                        --parens
-                           | StringLiteral
-                               
-             
+    Exp3         = Exp4 ("<="|"<"|"=="|"!="|">="|">") Exp4         --binary
+             	 | Exp4
+    Exp4         = Exp4 ("+" | "-") Exp5                --binary
+                 | Exp5
+    Exp5         = Exp5 ("*" | "/" | "%") Exp6          --binary
+                 | Exp6
+    Exp6         = Exp7 "**" Exp6                       --binary
+                 | Exp7
+    Exp7         = num
+                 | true
+                 | false
+                 | id                                 --id
+                 | "(" Exp ")"                        --parens
+                 | StringLiteral
              
     if       				= "if" ~alnum
     in                  = "in" ~alnum
@@ -107,13 +98,13 @@ Kis {
     increment           = "pounce" ~alnum
     break               = "break" ~alnum
     return              = "purr" ~alnum
-    end                 = "nap" ~alnum
+    endkw               = "nap" ~alnum
     num					   = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
     true					   = "true" ~idchar
     false					= "false" ~idchar
     id						= ~keyword letter alnum*
     idchar   				= letter | digit | "_"
     keyword  			   = if | elseif | else | for | while | class | return
-                             | module | export | import | end
+                             | module | export | import | endkw
     space      		   += "//" (~"\n" any)*                             --comment
 }

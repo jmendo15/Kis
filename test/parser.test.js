@@ -38,10 +38,10 @@ const syntaxChecks = [
 //Code that Kis should NOT compile
 // Must be of form [scenario, source_code, errorMessagePattern]
 const syntaxErrors = [
-  ["wrong variable declaration", "let variable = 3", /Line 1, col 1/],
-  ["wrong print statement", "print(hi)", /Line 1, col 1/],
-  ["wrong while statement", "while x < 3: meow(hello)", /Line 1, col 1/],
-  ["wrong if statement", "incase x < 3 meow(hello) sleep", /Line 1, col 1/],
+  ["wrong variable declaration", "let variable = 3", /Line 1, col 5/],
+  ["wrong print statement", "print(hi)", /Line 1, col 6/],
+  ["wrong while statement", "while x < 3: meow(hello)", /Line 1, col 7/],
+  ["wrong if statement", "incase x < 3 meow(hello) sleep", /Line 1, col 8/],
   [
     "missing colon after if test",
     "if x < 3 meow(hello) orelse meow(goodbye)",
@@ -55,7 +55,7 @@ const syntaxErrors = [
   [
     "using and instead of &&",
     "set x = true and false or (!false)",
-    /Line 1, col 14/,
+    /Line 1, col 18/,
   ],
   [
     "wrong ternary operator and too many params in print statement",
@@ -63,8 +63,8 @@ const syntaxErrors = [
     /Line 1, col 9/,
   ],
   ["comments with pound symbol ", "meow(0) #comment", /Line 1, col 9/],
-  ["wrong for loop", "for cat in cats: meow(cap) nap", /Line 1, col 1/],
-  ["wrong modularity import", "importing packagexample", /Line 1, col 7/],
+  ["wrong for loop", "for cat in cats: meow(cap) nap", /Line 1, col 5/],
+  ["wrong modularity import", "importing packagexample", /Line 1, col 11/],
   [
     "wrong modularity export",
     "module packageExample mail kitty addition(a: int, b: int): purr a + b",
