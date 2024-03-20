@@ -114,6 +114,6 @@ Kis {
     id						= ~keyword letter alnum*
     idchar   				= letter | digit | "_"
     keyword  			   = if | elseif | else | for | while | class | return
-                             | module | export | import
+                             | module | export | import | end
     space      		   += "//" (~"\n" any)*                             --comment
 }

@@ -1,0 +1,5 @@
+set cats = 1
+cats++
+
+set mouse = 2
+mouse--

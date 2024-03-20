@@ -16,6 +16,7 @@ const syntaxChecks = [
   ["print statement", "meow(hi)"],
   ["while statement", "whisker x < 3: meow(hello) nap"],
   ["if statement", "if x < 3: meow(hello) nap"],
+  ["cats++", "cat--"],
   ["if with else", "if x < 3: meow(hello) else: meow(goodbye) nap"],
   [
     "function declaration",
