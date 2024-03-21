@@ -5,6 +5,8 @@
 <img src="https://github.com/jmendo15/Kis/assets/72280816/1bf20903-0a1a-4ef3-bdbb-54f51496ea3a" width="300" height="300">
 
 # Introduction:
+There was once a cat, and her name was Kis. She double majored in computer science and felinology (study of cats)
+at the Kitties Tech University. In her junior year of college she realized there were no programming languages designed by cats, they were all designed by these weird beings called, "humans." In the Spring of 2024, Kis set off to design her own programming language and named it after herself. Instead of using words like "print", "for", "while", "end", and "function", she chose words cats are more familiar with. In addition to that, this is how she described her language...
 
 Kis is a sophisticated, statically-typed programming language designed for modern software development needs. Its rich type system supports both primitive and user-defined types, enhanced by advanced features like generics and type inference, allowing developers to write expressive, yet type-safe code. A distinctive feature of Kis is its support for function and operator overloading, enabling context-specific behaviors of functions and operators based on argument types, thereby enhancing the language's flexibility and expressiveness.
 
