@@ -35,34 +35,33 @@ const builder = match.matcher.grammar.createSemantics().addOperation("rep", {
   StructDecl(_house, id, _open, fields, _close) {
     const structName = id.sourceString;
     const body = fields.children.map((f) => f.rep());
-    // TODO: some validation
-    // ensureUniqueStructName(structName, { at: id });
-    // TODO add to context
+    function ensureUniqueStructName(structName, context, location) {
+      if(context.has(structName)){
+        throw new Error(`Struct name "${structName}" is already declared at ${location.at.line}:${location.at.column}.`);
+      }
+    }
+    ensureUniqueStructName(structName, context, {at: id.location});
     const type = core.structType(structName, body);
-    return core.typeDeclaration(structName, Type_isString);
+    context.add(structName, type);
+    return core.typeDeclaration(type);
   },
 
-  FuncDecl(_func, id, parameters, block) {
-    const func = core.func(id.sourceString);
-    mustNotAlreadyBeDeclared(id.sourceString, { at: id });
-    context.add(id.sourceString, func);
+  FuncDecl(_kitty, id, parameters, block) {
+    const funcName = id.sourceString;
+    mustNotAlreadyBeDeclared(funcName, context, { at: id.location });
+    const func = core.fun(funcName);
+    context.add(funcName, func);
 
     // Parameters are part of the child context
-    context = context.newChildContext({ inLoop: false, function: func });
-    const params = parameters.rep();
-
-    // Now that the parameters are known, we compute the function's type.
-    // This is fine; we did not need the type to analyze the parameters,
-    // but we do need to set it before analyzing the body.
+    let functionContext = context.newChildContext({ inLoop: false, function: func });
+    const params = parameters.children.map((param) => param.rep(functionContext));
     const paramTypes = params.map((param) => param.type);
     const returnType = type.children?.[0]?.rep() ?? VOID;
     func.type = core.functionType(paramTypes, returnType);
 
     // Analyze body while still in child context
-    const body = block.rep();
-
+    const body = block.rep(functionContext);
     // Go back up to the outer context before returning
-    context = context.parent;
     return core.functionDeclaration(func, params, body);
   },
 
@@ -92,9 +91,7 @@ const builder = match.matcher.grammar.createSemantics().addOperation("rep", {
     return core.functionType(paramTypes, returnType);
   },
 
-  //confirm isInt and isString are working
   Type_isInt(_typeCheck, _left, id, _right) {
-    // "isInt" "(" id ")"
     const variableType = context.lookup(id.sourceString);
     mustHaveBeenFound(variableType, id.sourceString, { at: id });
     const isInt = core.isIntType(variableType); // Assuming isIntType is a function that checks if type is integer
@@ -184,20 +181,12 @@ const builder = match.matcher.grammar.createSemantics().addOperation("rep", {
     context.importModule(module);
   },
 
-  // BuiltInFunctions
-
-  // AddOrConcat
-
   CompareStrings(identifier, _equals, _openQuote, stringContent, _closeQuote) {
     // Retrieve the variable's name from the identifier part of the grammar.
     const variableName = identifier.sourceString;
     // Look up the variable in the current context to get its type and value.
     const variable = context.lookup(variableName);
-    if (!variable) {
-      throw new Error(`Variable '${variableName}' not found.`);
-    }
-    // Optionally, check if the variable is of a type that can be compared to a string.
-    // This step depends on the capabilities and rules of your programming language.
+    if (!variable) {throw new Error(`Variable '${variableName}' not found.`);}
     if (!isTypeCompatibleWithString(variable.type)) {
       throw new Error(
         `Incompatible types for comparison: ${variable.type} cannot be compared to a string.`
@@ -205,7 +194,6 @@ const builder = match.matcher.grammar.createSemantics().addOperation("rep", {
     }
     // Extract the string literal value. Since the string content is matched as a sequence
     // of any characters except the closing quote, we join them together.
-    // This simplifies handling of the (~"\"" any)* part of the grammar.
     const stringParts = stringContent.children.map((part) => {
       if (part.sourceString === '\\"') {
         return '"'; // Unescaping a double quote
@@ -214,7 +202,6 @@ const builder = match.matcher.grammar.createSemantics().addOperation("rep", {
       }
     });
     const stringValue = stringParts.join("");
-
     return core.createStringComparisonExpression(variable, stringValue);
   },
 
@@ -235,13 +222,10 @@ const builder = match.matcher.grammar.createSemantics().addOperation("rep", {
   identifier(letterOrDigit, restOfIdentifier) {
     const firstCharacter = letterOrDigit.sourceString;
     // Then, process the rest of the identifier, which can be a mix of letters and digits.
-    // Since 'restOfIdentifier' is a sequence of characters, we join them together to form a complete string.
     const remainingCharacters = restOfIdentifier.children
       .map((char) => char.sourceString)
       .join("");
-    // Combine the first character with the rest of the identifier to get the full identifier's name.
     const fullName = firstCharacter + remainingCharacters;
-    // Return the full identifier name.
     return fullName;
   },
 
