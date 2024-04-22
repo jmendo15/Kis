@@ -40,10 +40,11 @@ Joanna Estrada,
 - The language runtime and compiler must enforce and optimize the use of immutable data.
 
 # Example Programs:
+<img width="627" alt="Screenshot 2024-04-21 at 8 21 35 PM" src="https://github.com/jmendo15/Kis/assets/89826597/372d05a1-fb97-4b07-8f19-347d0d0b4982">
 
-<img width="788" alt="Screenshot 2024-01-28 at 3 56 58 PM" src="https://github.com/jmendo15/Kis/assets/89826597/8e123710-a8a0-4dbf-9177-73bb4a4087fb">
+<img width="619" alt="Screenshot 2024-04-21 at 8 21 52 PM" src="https://github.com/jmendo15/Kis/assets/89826597/cd54c6a8-03aa-4da0-9c3a-0fd11a35d08f">
 
-<img width="777" alt="Screenshot 2024-01-28 at 3 59 46 PM" src="https://github.com/jmendo15/Kis/assets/89826597/d9a4ee43-db79-4f36-bd11-6df47e85f2a5">
+
 
 # Kis Webpage:
 
