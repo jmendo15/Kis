@@ -1,6 +1,6 @@
-//Example of for looping with and without a break
+// Example of for looping with and without a break
 
-//List of cats:
+// List of cats:
 set cats = ["garfield", "cleopatra", "sphinx"]
 
 //Will print garfield cleopatra sphinx
@@ -8,7 +8,7 @@ fur cat in cats:
     meow(cat)
 nap
 
-//Will print cleopatra
+// Will print cleopatra
 fur cat in cats:
     if cat == "sphinx" || cat == "garfield":
         break
@@ -17,7 +17,7 @@ fur cat in cats:
     nap
 nap
 
-//NOTE:
+// NOTE:
 // fur is a for loop
 
 

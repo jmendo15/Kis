@@ -1,4 +1,4 @@
-//Kis allows for string concatenation and integer addition with +
+// Kis allows for string concatenation and integer addition with +
 
 kitty addOrConcat(a,b):
     if isInt(a) && isInt(b):
@@ -9,7 +9,7 @@ kitty addOrConcat(a,b):
 
     else:
         purr null
-
+    
     nap
 
 nap

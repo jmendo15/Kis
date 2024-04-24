@@ -1,9 +1,17 @@
 module geometry
     export kitty calculateArea(radius: float)
-        purr 3.14 * radius * radius
+        purr 3.14 * geometry.square(radius)
+    nap
+
+    kitty square(num:float)
+        purr num * num
     nap
 nap
 
+// In another file
 import geometry
 set circleArea = geometry.calculateArea(5.0)
 meow(circleArea)
+
+// Cannot be done because square() is not exported:
+// set m = geometry.square(num)
