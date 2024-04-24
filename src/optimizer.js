@@ -1,3 +1,3 @@
-export default function optimize() {
-    throw new Error("Noy yet implemented")
+export default function optimize(node) {
+    return node
 }
