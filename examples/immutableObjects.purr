@@ -1,4 +1,4 @@
-//Immutable objects, inspired by Java
+// Immutable objects, inspired by Java
 
 class Cat(name: String, age: int) 
     kitty __init__(self):
