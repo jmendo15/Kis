@@ -91,10 +91,6 @@ export function whileStatement(test, body) {
   return { kind: "WhileStatement", test, body };
 }
 
-export function repeatStatement(count, body) {
-  return { kind: "RepeatStatement", count, body };
-}
-
 export function forRangeStatement(iterator, low, op, high, body) {
   return { kind: "ForRangeStatement", iterator, low, op, high, body };
 }
