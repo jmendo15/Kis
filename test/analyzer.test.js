@@ -4,9 +4,9 @@ import analyze from "../src/analyzer.js";
 import * as core from "../src/core.js";
 
 const semanticChecks = [
-  ["variables can be printed", " set x = 1; purr x;"],
-  ["variables can be reassigned", "set x = 1; x = x * 5 / ((-3) + x);"],
-  ["increment and decrement", "set x = 10; x--; x++;"],
+  ["variables can be printed", "set x = 1 meow(x)"],
+  ["variables can be reassigned", "set x = 1 reset x = x * 5 / ((-3) + x)"],
+  ["increment and decrement", "set x = 10 pounce x-- pounce x++"],
   [
     "for loops with arrays",
     'set cats = ["garfield", "cleopatra", "sphinx"]; fur cat in cats: meow(cat); nap;',

@@ -4,9 +4,10 @@ Kis {
 
     Export      = export FuncDecl
 
-    Stmt        = Assignment
+    Stmt        = VarDecl
                 | FuncDecl
                 | StructDecl
+                | Assignment
                 | ReturnStatement
                 | PrintStmt
                 | ForStmt
@@ -16,7 +17,8 @@ Kis {
                 | IfStmt
                 | ImportStmt
     
-    Assignment  = set id "=" Exp
+    VarDecl     = set id "=" Exp
+    Assignment  = reset id "=" Exp
     StructDecl  = house id "{" Field* "}"
     Field       = id ":" Type
     
@@ -83,6 +85,7 @@ Kis {
     endkw        = "nap" ~alnum
     kitty        = "kitty" ~alnum
     set          = "set" ~alnum
+    reset        = "reset" ~alnum
     house        = "house" ~alnum
     num	         = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
     true	     = "true" ~idchar

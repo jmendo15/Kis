@@ -19,7 +19,7 @@
     "mocha": "^10.2.0"
   },
   "dependencies": {
-    "graph-stringify": "^1.0.1",
+    "graph-stringify": "^1.1.0",
     "joi": "^17.12.1",
     "ohm-js": "^17.1.0"
   }

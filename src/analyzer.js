@@ -1,6 +1,62 @@
 import * as core from "./core.js";
 
-export default function analyze(node) {
+class Context {
+  // Like most statically-scoped languages, Carlos contexts will contain a
+  // map for their locally declared identifiers and a reference to the parent
+  // context. The parent of the global context is null. In addition, the
+  // context records whether analysis is current within a loop (so we can
+  // properly check break statements), and reference to the current function
+  // (so we can properly check return statements).
+  constructor({
+    parent = null,
+    locals = new Map(),
+    inLoop = false,
+    function: f = null,
+  }) {
+    Object.assign(this, { parent, locals, inLoop, function: f });
+  }
+  add(name, entity) {
+    this.locals.set(name, entity);
+  }
+  lookup(name) {
+    return this.locals.get(name) || this.parent?.lookup(name);
+  }
+  static root() {
+    return new Context({
+      locals: new Map(Object.entries(core.standardLibrary)),
+    });
+  }
+  newChildContext(props) {
+    return new Context({ ...this, ...props, parent: this, locals: new Map() });
+  }
+}
+
+export default function analyze(match) {
+  let context = Context.root();
+
+  function must(condition, message, errorLocation) {
+    if (!condition) {
+      const prefix = errorLocation.at.source.getLineAndColumnMessage();
+      throw new Error(`${prefix}${message}`);
+    }
+  }
+
+  function mustNotAlreadyBeDeclared(name, at) {
+    must(!context.lookup(name), `Identifier ${name} already declared`, at);
+  }
+
+  function mustHaveBeenFound(entity, name, at) {
+    must(entity, `Identifier ${name} not declared`, at);
+  }
+
+  function mustBeInLoop(at) {
+    must(context.inLoop, "Break can only appear in a loop", at);
+  }
+
+  function mustBeInAFunction(at) {
+    must(context.function, "Return can only appear in a function", at);
+  }
+
   // Building the program representation will be done together with semantic
   // analysis and error checking. In Ohm, we do this with a semantics object
   // that has an operation for each relevant rule in the grammar. Since the
@@ -25,12 +81,20 @@ export default function analyze(node) {
       return funDecl.rep();
     },
 
-    Assignment(_set, id, _eq, exp) {
+    VarDecl(_set, id, _eq, exp) {
       const initializer = exp.rep();
       const variable = core.variable(id.sourceString, initializer.type);
       mustNotAlreadyBeDeclared(id.sourceString, { at: id });
       context.add(id.sourceString, variable);
       return core.variableDeclaration(variable, initializer);
+    },
+
+    Assignment(_set, id, _eq, exp) {
+      const target = context.lookup(id.sourceString);
+      mustHaveBeenFound(target, id.sourceString, { at: id });
+      const source = exp.rep();
+      // TODO mustBeAssignable(target, initializer, { at: id });
+      return core.assignment(target, source);
     },
 
     StructDecl(_house, id, _open, fields, _close) {
@@ -189,63 +253,53 @@ export default function analyze(node) {
       context.importModule(module);
     },
 
-    CompareStrings(
-      identifier,
-      _equals,
-      _openQuote,
-      stringContent,
-      _closeQuote
-    ) {
-      // Retrieve the variable's name from the identifier part of the grammar.
-      const variableName = identifier.sourceString;
-      // Look up the variable in the current context to get its type and value.
-      const variable = context.lookup(variableName);
-      if (!variable) {
-        throw new Error(`Variable '${variableName}' not found.`);
-      }
-      if (!isTypeCompatibleWithString(variable.type)) {
-        throw new Error(
-          `Incompatible types for comparison: ${variable.type} cannot be compared to a string.`
-        );
-      }
-      // Extract the string literal value. Since the string content is matched as a sequence
-      // of any characters except the closing quote, we join them together.
-      const stringParts = stringContent.children.map((part) => {
-        if (part.sourceString === '\\"') {
-          return '"'; // Unescaping a double quote
-        } else {
-          return part.sourceString;
-        }
-      });
-      const stringValue = stringParts.join("");
-      return core.createStringComparisonExpression(variable, stringValue);
-    },
+    // CompareStrings(
+    //   identifier,
+    //   _equals,
+    //   _openQuote,
+    //   stringContent,
+    //   _closeQuote
+    // ) {
+    //   // Retrieve the variable's name from the identifier part of the grammar.
+    //   const variableName = identifier.sourceString;
+    //   // Look up the variable in the current context to get its type and value.
+    //   const variable = context.lookup(variableName);
+    //   if (!variable) {
+    //     throw new Error(`Variable '${variableName}' not found.`);
+    //   }
+    //   if (!isTypeCompatibleWithString(variable.type)) {
+    //     throw new Error(
+    //       `Incompatible types for comparison: ${variable.type} cannot be compared to a string.`
+    //     );
+    //   }
+    //   // Extract the string literal value. Since the string content is matched as a sequence
+    //   // of any characters except the closing quote, we join them together.
+    //   const stringParts = stringContent.children.map((part) => {
+    //     if (part.sourceString === '\\"') {
+    //       return '"'; // Unescaping a double quote
+    //     } else {
+    //       return part.sourceString;
+    //     }
+    //   });
+    //   const stringValue = stringParts.join("");
+    //   return core.createStringComparisonExpression(variable, stringValue);
+    // },
 
-    IncrementStmt_pounce(exp, operator) {
+    IncrementStmt_pounce(_pounce, exp, operator) {
       const variable = exp.rep();
-      mustHaveIntegerType(variable, { at: exp });
+      //mustHaveIntegerType(variable, { at: exp });
       return operator.sourceString === "++"
         ? core.increment(variable)
         : core.decrement(variable);
     },
 
-    paramList(firstIdentifier, _comma, secondIdentifier) {
+    Params(firstIdentifier, _comma, secondIdentifier) {
       const paramName1 = firstIdentifier.rep();
       const paramName2 = secondIdentifier.rep();
       return [paramName1, paramName2];
     },
 
-    identifier(letterOrDigit, restOfIdentifier) {
-      const firstCharacter = letterOrDigit.sourceString;
-      // Then, process the rest of the identifier, which can be a mix of letters and digits.
-      const remainingCharacters = restOfIdentifier.children
-        .map((char) => char.sourceString)
-        .join("");
-      const fullName = firstCharacter + remainingCharacters;
-      return fullName;
-    },
-
-    ReturnStmt(returnKeyword, exp) {
+    ReturnStatement(returnKeyword, exp) {
       mustBeInAFunction({ at: returnKeyword });
       mustReturnSomething(context.function, { at: returnKeyword });
       const returnExpression = exp.rep();
@@ -257,7 +311,7 @@ export default function analyze(node) {
       return core.returnStatement(returnExpression);
     },
 
-    StringLiteral(_openQuote, _chars, _closeQuote) {
+    stringLiteral(_openQuote, _chars, _closeQuote) {
       return this.sourceString;
     },
 
@@ -331,13 +385,9 @@ export default function analyze(node) {
 
     Exp7_id(id) {
       const entity = context.lookup(id.sourceString);
-      musthavebeenfound(entity, id.sourceString, { at: id });
+      mustHaveBeenFound(entity, id.sourceString, { at: id });
       mustHaveBeenFound(entity, { at: id });
       return entity;
-    },
-
-    Exp7_exp(exp) {
-      return exp.rep();
     },
 
     Exp7_parens(_open, exp, _clone) {
@@ -352,11 +402,17 @@ export default function analyze(node) {
       return false;
     },
 
-    Exp7_stringliteral(_left, sl, _right) {
-      let rawString = sl.sourceString;
-      let content = rawString.slice(1, rawString.length - 1);
-      let unescapedContent = content.replace(/\\"/g, '"');
-      return unescapedContent;
+    num(_whole, _point, _fraction, _e, _sign, _exponent) {
+      // Carlos floats will be represented as plain JS numbers
+      return Number(this.sourceString);
     },
+
+    // Exp7_stringliteral(_left, sl, _right) {
+    //   let rawString = sl.sourceString;
+    //   let content = rawString.slice(1, rawString.length - 1);
+    //   let unescapedContent = content.replace(/\\"/g, '"');
+    //   return unescapedContent;
+    // },
   });
+  return builder(match).rep();
 }
