@@ -37,7 +37,7 @@ const semanticErrors = [
   [
     "invalid type usage",
     'set x = "hello"; x++;',
-    /Cannot use '++' on type string/,
+    /Cannot use '\+\+' on type string/,
   ],
   ["invalid function call", "set x = 1; x();", /'x' is not a function/],
   [
