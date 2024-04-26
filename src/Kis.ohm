@@ -38,7 +38,7 @@ Kis {
     WhileStmt        = while Exp Block
     ForStmt          = for id in Exp Block
     ImportStmt       = import id
-    IncrementStmt    = Exp7 ("++" |"--")                     --pounce
+    IncrementStmt    = pounce Exp7 ("++" |"--")       --pounce              
     BreakStmt        = break
     ReturnStatement  = return Exp
     
@@ -77,7 +77,7 @@ Kis {
     import       = "import" ~alnum 
     export       = "export" ~alnum 
     module       = "module" ~alnum 
-    increment    = "pounce" ~alnum
+    pounce    = "pounce" ~alnum
     break        = "break" ~alnum
     return       = "purr" ~alnum
     endkw        = "nap" ~alnum
