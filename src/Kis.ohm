@@ -67,8 +67,10 @@ Kis {
                   | id                                 --id
                   | "(" Exp ")"                        --parens
                   | stringLiteral
+                  |"[" ArrayElements "]"                -- array 
+    
     stringLiteral = "\"" (~"\"" any)* "\""
-
+    ArrayElements = Exp ("," Exp)*              -- expression
     if           = "if" ~alnum
     in           = "in" ~alnum
     elseif       = "elseif" ~alnum

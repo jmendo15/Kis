@@ -9,40 +9,32 @@ const semanticChecks = [
   ["increment and decrement", "set x = 10 pounce x-- pounce x++"],
   [
     "for loops with arrays",
-    'set cats = ["garfield", "cleopatra", "sphinx"]; fur cat in cats: meow(cat); nap;',
-  ],
-  [
-    "for loops with arrays",
-    'set cats = ["garfield", "cleopatra", "sphinx"]; fur cat in cats: meow(cat); nap;',
+    'set cats = ["garfield", "cleopatra", "sphinx"] fur cat in cats: meow(cat) nap',
   ],
   [
     "for loop with break",
-    'set cats = ["garfield", "cleopatra", "sphinx"]; fur cat in cats: if cat == "sphinx" || cat == "garfield": break; else meow(cat); nap; nap;',
+    'set cats = ["garfield", "cleopatra", "sphinx"] fur cat in cats: if cat == "sphinx" || cat == "garfield": break else meow(cat) nap nap',
   ],
   [
     "class instance and method call",
-    'class Cat(name: String, age: int) { kitty __init__(self): self.name = name; self.age = age; nap; kitty getName(self): set message = "Name: " + self.name + " Age: " + self.age; meow(message); nap; nap; } set Garf = new Cat("Garfield", 40); meow(Garf.getName());',
+    'class Cat(name: String, age: int) { kitty __init__(self): self.name = name self.age = age nap kitty getName(self): set message = "Name: " + self.name + " Age: " + self.age meow(message) nap nap } set Garf = new Cat("Garfield", 40) meow(Garf.getName())',
   ],
   [
     "function calling and mathematical operations",
-    "set dozen = 12; meow(dozen % 3 ** 1); kitty gcd(x,y): purr y == 0 ? x : gcd(y, x % y); whisker dozen >= 3 || (gcd(1,10) != 5): dozen = dozen - 2.75E+19 ** 1 ** 3; nap;",
-  ],
-  [
-    "traverse a struct",
-    'package main; type Node struct { Name string; Children []Node; } kitty climb(n: Node): meow(n.Name); if len(n.Children) > 0: fur i := range n.Children: n.Children[i].climb(); nap; nap; nap; kitty main(): tree := Node: Name: "Parent", Children: []Node { { Name: "Child 1", Children: []Node{}, }, { Name: "Child 2", Children: []Node{}, }, }; nap; tree.climb(); nap;',
+    "set dozen = 12 meow(dozen % 3 ** 1) kitty gcd(x,y): purr y == 0 ? x : gcd(y, x % y) whisker dozen >= 3 || (gcd(1,10) != 5): dozen = dozen - 2.75E+19 ** 1 ** 3 nap",
   ],
 ];
 const semanticErrors = [
-  ["undeclared variable access", "meow(x);", /Variable 'x' not declared/],
+  ["undeclared variable access", "meow(x)", /Variable 'x' not declared/],
   [
     "invalid type usage",
-    'set x = "hello"; x++;',
+    'set x = "hello" x++',
     /Cannot use '\+\+' on type string/,
   ],
-  ["invalid function call", "set x = 1; x();", /'x' is not a function/],
+  ["invalid function call", "set x = 1 x()", /'x' is not a function/],
   [
     "class method not found",
-    'class Cat(name: String, age: int) { nap; } set c = new Cat("Garfield", 40); c.play();',
+    'class Cat(name: String, age: int) { nap; } set c = new Cat("Garfield", 40) c.play()',
     /Method 'play' not found on 'Cat'/,
   ],
 ];
@@ -62,7 +54,7 @@ describe("Kis language analyzer", () => {
   }
   // Test to ensure the analyzer produces the expected representation for a trivial program
   it("produces the expected representation for a trivial program", () => {
-    const sample = "set x = 5 + 3; meow(x);"; // An example simple program
+    const sample = "set x = 5 + 3 meow(x)"; // An example simple program
     const expected = {
       type: "Program",
       body: [

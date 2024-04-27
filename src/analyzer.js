@@ -56,6 +56,12 @@ export default function analyze(match) {
   function mustBeInAFunction(at) {
     must(context.function, "Return can only appear in a function", at);
   }
+  function mustBeAssignable(e, { toType: type }, at) {
+    const message = `Cannot assign a ${typeDescription(
+      e.type
+    )} to a ${typeDescription(type)}`;
+    must(assignable(e.type, type), message, at);
+  }
 
   // Building the program representation will be done together with semantic
   // analysis and error checking. In Ohm, we do this with a semantics object
@@ -412,6 +418,11 @@ export default function analyze(match) {
     //   let content = rawString.slice(1, rawString.length - 1);
     //   let unescapedContent = content.replace(/\\"/g, '"');
     //   return unescapedContent;
+    // },
+    // Exp7_arrayexp(_open, args, _close) {
+    //   const elements = args.asIteration().children.map((e) => e.rep());
+    //   mustAllHaveSameType(elements, { at: args });
+    //   return core.arrayExpression(elements);
     // },
   });
   return builder(match).rep();
