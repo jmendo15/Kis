@@ -1,7 +1,7 @@
 const regexes = {
     canadianPostalCode: /^[A-CEG-HJ-NPR-TV-Z]\d[A-CEG-HJ-NPR-TV-Z][ ]\d[A-CEG-HJ-NPR-TV-Z]\d$/,
     visa: /^4\d{12}(\d{3})?$/,
-    masterCard: /^5[1-5]\d{14}|22[2-9][0-9]\d{12}|23\d{14}|24\d{14}|25\d{14}|26\d{14}|27[0-1]\d{13}|2720\d{12}$/,
+    masterCard: /^(^5[1-5]\d{14}$)|22[2-9][0-9]\d{12}|23\d{14}|24\d{14}|25\d{14}|26\d{14}|27[0-1]\d{13}|2720\d{12}$/,
     notThreeEndingInOO: /^(?!.(oo|Oo|oO|OO)$).*$/iu,
     divisibleBy16: /^(0+|[01]*0{4,})$/,
     eightThroughThirtyTwo: /^(?:[89]|[12][0-9]|3[0-2])$/,
