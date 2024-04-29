@@ -21,7 +21,7 @@ const semanticChecks = [
   ],
   [
     "function calling and mathematical operations",
-    "set dozen = 12 meow(dozen % 3 ** 1) kitty gcd(x,y): purr y == 0 ? x : gcd(y, x % y) whisker dozen >= 3 || (gcd(1,10) != 5): dozen = dozen - 2.75E+19 ** 1 ** 3 nap",
+    "set dozen = 12 meow(dozen % 3 ** 1) kitty gcd(x: int, y: int): purr y == 0 ? x : gcd(y, x % y) whisker dozen >= 3 || (gcd(1, 10) != 5): dozen = dozen - 200 ** 1 nap nap",
   ],
 ];
 const semanticErrors = [
