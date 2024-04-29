@@ -25,7 +25,8 @@ const semanticChecks = [
   ],
 ];
 const semanticErrors = [
-  ["undeclared variable access", "meow(x)", /Variable 'x' not declared/],
+  ["undeclared variable access", "meow(x)", /Identifier\s+x\s+not\s+declared/],
+
   [
     "invalid type usage",
     'set x = "hello" x++',
