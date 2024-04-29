@@ -82,7 +82,14 @@ export function shortReturnStatement() {
 export function ifStatement(test, consequent, alternate) {
   return { kind: "IfStatement", test, consequent, alternate };
 }
-
+export function longIfStatement(test, consequent, alternate) {
+  return {
+    type: "LongIfStatement", // You might name this just 'IfStatement' if you prefer
+    test: test,
+    consequent: consequent,
+    alternate: alternate,
+  };
+}
 export function shortIfStatement(test, consequent) {
   return { kind: "ShortIfStatement", test, consequent };
 }

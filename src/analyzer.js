@@ -1,4 +1,10 @@
 import * as core from "./core.js";
+const INT = core.intType;
+const FLOAT = core.floatType;
+const STRING = core.stringType;
+const BOOLEAN = core.boolType;
+const ANY = core.anyType;
+const VOID = core.voidType;
 
 class Context {
   // Like most statically-scoped languages, Carlos contexts will contain a
@@ -47,6 +53,9 @@ export default function analyze(match) {
 
   function mustHaveBeenFound(entity, name, at) {
     must(entity, `Identifier ${name} not declared`, at);
+  }
+  function mustHaveBooleanType(e, at) {
+    must(e.type === BOOLEAN, "Expected a boolean", at);
   }
   function determineCommonType(types) {
     if (types.every((type) => type === types[0])) {
@@ -271,7 +280,9 @@ export default function analyze(match) {
       context = context.parent;
       return core.forStatement(iterator, collection, body);
     },
-
+    break(_break) {
+      return core.breakStatement;
+    },
     ImportStmt(_import, id) {
       const moduleName = id.sourceString;
       const module = context.lookupModule(moduleName);
@@ -388,19 +399,19 @@ export default function analyze(match) {
     },
 
     Exp1_binary(exp1, op, exp2) {
-      return core.binary(op.sourceString, exp1.rep(), exp2.rep());
+      return core.binary(op.sourceString, exp1.rep(), exp2.rep(), BOOLEAN);
     },
 
     Exp2_binary(exp1, op, exp2) {
-      return core.binary(op.sourceString, exp1.rep(), exp2.rep());
+      return core.binary(op.sourceString, exp1.rep(), exp2.rep(), BOOLEAN);
     },
 
     Exp3_binary(exp1, op, exp2) {
-      return core.binary(op.sourceString, exp1.rep(), exp2.rep());
+      return core.binary(op.sourceString, exp1.rep(), exp2.rep(), BOOLEAN);
     },
 
     Exp4_binary(exp1, op, exp2) {
-      return core.binary(op.sourceString, exp1.rep(), exp2.rep());
+      return core.binary(op.sourceString, exp1.rep(), exp2.rep(), INT);
     },
 
     Exp5_binary(exp1, op, exp2) {

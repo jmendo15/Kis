@@ -27,6 +27,16 @@ const syntaxChecks = [
   ["ternary operator", "meow( x ? y : z)"],
   ["comments", "meow(0) // comment"],
   ["for loop", "fur cat in cats: meow(cap) nap"],
+  [
+    "for loop with break",
+    `fur cat in cats:
+        if cat == "sphinx" || cat == "garfield":
+            break
+        else:
+            meow(cat)
+        nap
+      nap`,
+  ],
   ["modularity import", "import packageExample"],
   [
     "modularity export",

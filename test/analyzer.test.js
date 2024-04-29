@@ -13,7 +13,7 @@ const semanticChecks = [
   ],
   [
     "for loop with break",
-    'set cats = ["garfield", "cleopatra", "sphinx"] fur cat in cats: if cat == "sphinx" || cat == "garfield": break else meow(cat) nap nap',
+    'set cats = ["garfield", "cleopatra", "sphinx"] fur cat in cats: if cat == "sphinx" || cat == "garfield": break else: meow(cat) nap nap',
   ],
   [
     "class instance and method call",
