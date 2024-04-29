@@ -84,6 +84,10 @@ export default function analyze(match) {
     must(isArray, "Expected an array type", at);
   }
 
+  function mustHaveIntegerType(e, at) {
+    must(e.type === INT, "Expected an integer", at);
+  }
+
   function mustBeInAFunction(at) {
     must(context.function, "Return can only appear in a function", at);
   }
@@ -92,6 +96,14 @@ export default function analyze(match) {
       e.type
     )} to a ${typeDescription(type)}`;
     must(assignable(e.type, type), message, at);
+  }
+
+  function mustReturnSomething(f, at) {
+    must(
+      f.type.returnType !== VOID,
+      "Cannot return a value from this function",
+      at
+    );
   }
 
   // Building the program representation will be done together with semantic
@@ -157,29 +169,30 @@ export default function analyze(match) {
       context.add(funcName, func);
 
       // Parameters are part of the child context
-      let functionContext = context.newChildContext({
+      context = context.newChildContext({
         inLoop: false,
         function: func,
       });
-      const params = parameters.children.map((param) =>
-        param.rep(functionContext)
-      );
-      const paramTypes = params.map((param) => param.type);
-      const returnType = type.children?.[0]?.rep() ?? VOID;
-      func.type = core.functionType(paramTypes, returnType);
+      console.log("PARAMETERS ARE", parameters.sourceString);
+      const params = parameters.rep();
+      // const paramTypes = params.map((param) => param.type);
+      // const returnType = type.children?.[0]?.rep() ?? VOID;
+      // func.type = core.functionType(paramTypes, returnType);
 
       // Analyze body while still in child context
-      const body = block.rep(functionContext);
+      const body = block.rep();
+      context = context.parent;
       // Go back up to the outer context before returning
       return core.functionDeclaration(func, params, body);
     },
 
     Params(_open, paramList, _close) {
       // Returns a list of variable nodes
+      console.log("PARAMLIST IS", paramList.sourceString);
       return paramList.asIteration().children.map((p) => p.rep());
     },
 
-    Param(id, _colon, _id) {
+    Param(id, _colon, type) {
       const param = core.variable(id.sourceString, false, type.rep());
       mustNotAlreadyBeDeclared(param.name, { at: id });
       context.add(param.name, param);
@@ -326,27 +339,21 @@ export default function analyze(match) {
 
     IncrementStmt_pounce(_pounce, exp, operator) {
       const variable = exp.rep();
-      //mustHaveIntegerType(variable, { at: exp });
+      mustHaveIntegerType(variable, { at: exp });
       return operator.sourceString === "++"
         ? core.increment(variable)
         : core.decrement(variable);
     },
 
-    Params(firstIdentifier, _comma, secondIdentifier) {
-      const paramName1 = firstIdentifier.rep();
-      const paramName2 = secondIdentifier.rep();
-      return [paramName1, paramName2];
-    },
-
     ReturnStatement(returnKeyword, exp) {
       mustBeInAFunction({ at: returnKeyword });
-      mustReturnSomething(context.function, { at: returnKeyword });
+      // mustReturnSomething(context.function, { at: returnKeyword });
       const returnExpression = exp.rep();
-      mustBeReturnable(
-        returnExpression,
-        { from: context.function },
-        { at: exp }
-      );
+      // mustBeReturnable(
+      //   returnExpression,
+      //   { from: context.function },
+      //   { at: exp }
+      // );
       return core.returnStatement(returnExpression);
     },
 
@@ -429,6 +436,8 @@ export default function analyze(match) {
       return entity;
     },
 
+    Exp7_call(id, _open, args, _close) {},
+
     Exp7_parens(_open, exp, _clone) {
       return exp.rep();
     },
@@ -460,6 +469,10 @@ export default function analyze(match) {
 
     false(_) {
       return false;
+    },
+
+    id(_firstChar, _restChars) {
+      return this.sourceString;
     },
 
     num(_whole, _point, _fraction, _e, _sign, _exponent) {

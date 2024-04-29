@@ -21,21 +21,17 @@ const semanticChecks = [
   ],
   [
     "function calling and mathematical operations",
-    "set dozen = 12 meow(dozen % 3 ** 1) kitty gcd(x: int, y: int): purr y == 0 ? x : gcd(y, x % y) whisker dozen >= 3 || (gcd(1, 10) != 5): dozen = dozen - 200 ** 1 nap nap",
+    "set dozen = 12 meow(dozen % 3 ** 1) kitty gcd(x: int, y: int): purr y == 0 ? x : gcd(y, x % y) whisker dozen >= 3 || (gcd(1, 10) != 5): reset dozen = dozen - 200 ** 1 ** 3 nap nap",
   ],
 ];
 const semanticErrors = [
   ["undeclared variable access", "meow(x)", /Identifier\s+x\s+not\s+declared/],
 
-  [
-    "invalid type usage",
-    'set x = "hello" x++',
-    /Cannot use '\+\+' on type string/,
-  ],
+  ["invalid type usage", 'set x = "hello" pounce x++', /Expected an integer/],
   ["invalid function call", "set x = 1 x()", /'x' is not a function/],
   [
     "class method not found",
-    'class Cat(name: String, age: int) { nap; } set c = new Cat("Garfield", 40) c.play()',
+    'house Cat(name: String, age: int) { nap; } set c = new Cat("Garfield", 40) c.play()',
     /Method 'play' not found on 'Cat'/,
   ],
 ];
@@ -57,22 +53,22 @@ describe("Kis language analyzer", () => {
   it("produces the expected representation for a trivial program", () => {
     const sample = "set x = 5 + 3 meow(x)"; // An example simple program
     const expected = {
-      type: "Program",
+      kind: "Script",
       body: [
         {
-          type: "VariableDeclaration",
+          kind: "VariableDeclaration",
           identifier: "x",
           expression: {
-            type: "BinaryExpression",
+            kind: "BinaryExpression",
             operator: "+",
             left: 5,
             right: 3,
           },
         },
         {
-          type: "PrintStatement",
+          kind: "PrintStatement",
           expression: {
-            type: "Identifier",
+            kind: "Identifier",
             name: "x",
           },
         },

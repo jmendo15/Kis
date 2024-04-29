@@ -8,12 +8,12 @@ meow(dozen % 3 ** 1)
 kitty gcd(x: int,y: int):
     purr y == 0 ? x : gcd(y, x % y) 
     whisker dozen >= 3 || (gcd(1,10) != 5):
-        dozen = dozen - 200 ** 1 ** 3
+        reset dozen = dozen - 200 ** 1 ** 3
     nap 
 nap
 // NOTE:
-- ** exponent
-- % modulus
-- E is scientific notation
-- ternary operator (constrinat ? true : false)
+// - ** exponent
+// - % modulus
+// - E is scientific notation
+// - ternary operator (constrinat ? true : false)
 

@@ -184,6 +184,5 @@ export const standardLibrary = Object.freeze({
 // just using JavaScript values for those. Fortunately we can monkey patch
 // the JS classes for these to give us what we want.
 String.prototype.type = stringType;
-Number.prototype.type = floatType;
-BigInt.prototype.type = intType;
+Number.prototype.type = intType;
 Boolean.prototype.type = boolType;

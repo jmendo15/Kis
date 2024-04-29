@@ -24,7 +24,7 @@ Kis {
     
     FuncDecl    = kitty id Params Block
     Params      = "(" ListOf<Param, ","> ")"
-    Param       = id ":" id?
+    Param       = id ":" id
     Type        = Type "?"                                   --optional
                 | "[" Type "]"                               --array
                 | "(" ListOf<Type, ","> ")" "->" Type        --function
@@ -64,6 +64,7 @@ Kis {
     Exp7          = num
                   | true
                   | false
+                  | id "(" ListOf<Exp, ","> ")"        --call
                   | id                                 --id
                   | "(" Exp ")"                        --parens
                   | stringLiteral
