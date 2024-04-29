@@ -2,7 +2,7 @@
 // accepts a program representation and returns the JavaScript translation
 // as a string.
 
-import { voidType, standardLibrary } from "./core.js"
+import { ClassType, Type } from "./core.js"
 
 export default function generate(program) {
   // When generating code for statements, we'll accumulate the lines of
@@ -10,16 +10,16 @@ export default function generate(program) {
   // with newlines and return the result.
   const output = []
 
-  const standardFunctions = new Map([
-    [standardLibrary.print, x => `console.log(${x})`],
-    [standardLibrary.sin, x => `Math.sin(${x})`],
-    [standardLibrary.cos, x => `Math.cos(${x})`],
-    [standardLibrary.exp, x => `Math.exp(${x})`],
-    [standardLibrary.ln, x => `Math.log(${x})`],
-    [standardLibrary.hypot, ([x, y]) => `Math.hypot(${x},${y})`],
-    [standardLibrary.bytes, s => `[...Buffer.from(${s}, "utf8")]`],
-    [standardLibrary.codepoints, s => `[...(${s})].map(s=>s.codePointAt(0))`],
-  ])
+  // const standardFunctions = new Map([
+  //   [standardLibrary.print, x => `console.log(${x})`],
+  //   [standardLibrary.sin, x => `Math.sin(${x})`],
+  //   [standardLibrary.cos, x => `Math.cos(${x})`],
+  //   [standardLibrary.exp, x => `Math.exp(${x})`],
+  //   [standardLibrary.ln, x => `Math.log(${x})`],
+  //   [standardLibrary.hypot, ([x, y]) => `Math.hypot(${x},${y})`],
+  //   [standardLibrary.bytes, s => `[...Buffer.from(${s}, "utf8")]`],
+  //   [standardLibrary.codepoints, s => `[...(${s})].map(s=>s.codePointAt(0))`],
+  // ])
 
   // Variable and function names in JS will be suffixed with _1, _2, _3,
   // etc. This is because "switch", for example, is a legal name in Carlos,

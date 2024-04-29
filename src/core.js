@@ -1,3 +1,12 @@
+import util from "util"
+
+export class Program {
+  constructor(statements) {
+    this.statements = statements
+  }
+}
+
+
 export function script(statements) {
   return { kind: "Script", statements };
 }
