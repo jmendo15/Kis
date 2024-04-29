@@ -48,6 +48,13 @@ export default function analyze(match) {
   function mustHaveBeenFound(entity, name, at) {
     must(entity, `Identifier ${name} not declared`, at);
   }
+  function determineCommonType(types) {
+    if (types.every((type) => type === types[0])) {
+      return types[0];
+    } else {
+      throw new Error("Array elements must have the same type");
+    }
+  }
 
   function mustBeInLoop(at) {
     must(context.inLoop, "Break can only appear in a loop", at);
@@ -62,6 +69,10 @@ export default function analyze(match) {
       "Not all elements have the same type",
       at
     );
+  }
+  function mustHaveAnArrayType(expression, at) {
+    const isArray = expression.type.category === "Array";
+    must(isArray, "Expected an array type", at);
   }
 
   function mustBeInAFunction(at) {
@@ -252,7 +263,7 @@ export default function analyze(match) {
       const iterator = core.variable(
         id.sourceString,
         true,
-        collection.type.baseType
+        collection.type.elementType
       );
       context = context.newChildContext({ inLoop: true });
       context.add(iterator.name, iterator);
@@ -417,10 +428,18 @@ export default function analyze(match) {
     Exp(expression) {
       return expression.rep();
     },
+    // Exp7_array(_openBracket, elements, _closeBracket) {
+    //   return {
+    //     type: "ArrayExpression",
+    //     elements: elements.rep(), // Ensure that 'elements' correctly calls the ArrayElements semantic action
+    //   };
+    // },
     Exp7_array(_openBracket, elements, _closeBracket) {
+      const elementReps = elements.asIteration().children.map((e) => e.rep());
+      const elementType = determineCommonType(elementReps.map((e) => e.type));
       return {
-        type: "ArrayExpression",
-        elements: elements.rep(), // Ensure that 'elements' correctly calls the ArrayElements semantic action
+        type: { category: "Array", elementType: elementType },
+        elements: elementReps,
       };
     },
 
