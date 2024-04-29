@@ -63,40 +63,86 @@ const optimizers = {
           return s.test ? s.consequent : s.alternate
         }
         return s
-      },
-      ShortIfStatement(s) {
-        s.test = optimize(s.test)
-        s.consequent = s.consequent.flatMap(optimize)
-        if (s.test.constructor === Boolean) {
-          return s.test ? s.consequent : []
-        }
-        return s
-      }, 
-      WhileStatement(s) {
-        s.test = optimize(s.test)
-        if (s.test === false) {
-          // while false is a no-op
-          return []
-        }
-        s.body = s.body.flatMap(optimize)
-        return s
-      },
-      ForStatement(s) {
-        s.iterator = optimize(s.iterator)
-        s.collection = optimize(s.collection)
-        s.body = s.body.flatMap(optimize)
-        if (s.collection?.kind === "EmptyArray") {
-          return []
-        }
-        return s
-      },
-      Conditional(e) {
-        e.test = optimize(e.test)
-        e.consequent = optimize(e.consequent)
-        e.alternate = optimize(e.alternate)
-        if (e.test.constructor === Boolean) {
-            return e.test ? e.consequent : e.alternate
-        }
-        return e
+    },
+    ShortIfStatement(s) {
+      s.test = optimize(s.test)
+      s.consequent = s.consequent.flatMap(optimize)
+      if (s.test.constructor === Boolean) {
+        return s.test ? s.consequent : []
       }
-}
+      return s
+    }, 
+    WhileStatement(s) {
+      s.test = optimize(s.test)
+      if (s.test === false) {
+        // while false is a no-op
+        return []
+      }
+      s.body = s.body.flatMap(optimize)
+      return s
+    },
+    ForStatement(s) {
+      s.iterator = optimize(s.iterator)
+      s.collection = optimize(s.collection)
+      s.body = s.body.flatMap(optimize)
+      if (s.collection?.kind === "EmptyArray") {
+        return []
+      }
+      return s
+    },
+    Conditional(e) {
+      e.test = optimize(e.test)
+      e.consequent = optimize(e.consequent)
+      e.alternate = optimize(e.alternate)
+      if (e.test.constructor === Boolean) {
+          return e.test ? e.consequent : e.alternate
+      }
+      return e
+    },
+    BinaryExpression(e) {
+      e.left = optimize(e.left);
+      e.right = optimize(e.right);
+      // Check if both operands are strings and the operation is concatenation
+      if (e.op === '+' && e.left.type.kind === 'StringType' && e.right.type.kind === 'StringType') {
+          // Assuming that values are stored in 'name' property and it's a simplified scenario
+          return {
+              kind: 'Variable',
+              name: e.left.name + e.right.name,
+              type: { kind: 'StringType' }
+          };
+      }
+      return e;
+    },
+    UnaryExpression(e) {
+      e.operand = optimize(e.operand);
+      if (typeof e.operand === Number) {
+          if (e.op === '-') {
+              return -e.operand;
+          }
+      }
+      return e;
+    },
+    SubscriptExpression(e) {
+      e.array = optimize(e.array);
+      e.index = optimize(e.index);
+    return e;
+    },
+    ArrayExpression(e) {
+      e.elements = e.elements.map(optimize)
+      return e
+    },
+    MemberExpression(e) {
+      e.object = optimize(e.object)
+      return e
+    },
+    FunctionCall(c) {
+      c.callee = optimize(c.callee)
+      c.args = c.args.map(optimize)
+      return c
+    },
+    ConstructorCall(c) {
+      c.callee = optimize(c.callee)
+      c.args = c.args.map(optimize)
+      return c
+    },
+  }
