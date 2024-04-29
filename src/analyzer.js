@@ -52,6 +52,17 @@ export default function analyze(match) {
   function mustBeInLoop(at) {
     must(context.inLoop, "Break can only appear in a loop", at);
   }
+  function mustAllHaveSameType(expressions, at) {
+    // Used to check the elements of an array expression, and the two
+    // arms of a conditional expression, among other scenarios.
+    must(
+      expressions
+        .slice(1)
+        .every((e) => equivalent(e.type, expressions[0].type)),
+      "Not all elements have the same type",
+      at
+    );
+  }
 
   function mustBeInAFunction(at) {
     must(context.function, "Return can only appear in a function", at);
@@ -398,6 +409,19 @@ export default function analyze(match) {
 
     Exp7_parens(_open, exp, _clone) {
       return exp.rep();
+    },
+    ArrayElements(elements) {
+      return elements.asIteration().children.map((element) => element.rep());
+    },
+
+    Exp(expression) {
+      return expression.rep();
+    },
+    Exp7_array(_openBracket, elements, _closeBracket) {
+      return {
+        type: "ArrayExpression",
+        elements: elements.rep(), // Ensure that 'elements' correctly calls the ArrayElements semantic action
+      };
     },
 
     true(_) {
