@@ -70,7 +70,7 @@ Kis {
                   |"[" ArrayElements "]"                -- array 
     
     stringLiteral = "\"" (~"\"" any)* "\""
-    ArrayElements = Exp ("," Exp)*              -- expression
+    ArrayElements = ListOf<Exp, ",">             
     if           = "if" ~alnum
     in           = "in" ~alnum
     elseif       = "elseif" ~alnum
