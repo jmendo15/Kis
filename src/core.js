@@ -122,6 +122,10 @@ export function emptyOptional(baseType) {
   return { kind: "EmptyOptional", baseType, type: optionalType(baseType) };
 }
 
+export function block(statements) {
+  return { kind: "Block", statements };
+}
+
 export function subscript(array, index) {
   return {
     kind: "SubscriptExpression",
