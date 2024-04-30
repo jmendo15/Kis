@@ -4,9 +4,7 @@ import * as core from "../src/core.js";
 
 // Make some test cases easier to read
 const x = core.variable("x", false, core.intType);
-const a = core.variable("a", false, core.arrayType(core.intType));
 const emptyArrayInt = core.emptyArray(core.intType);
-const nullValue = core.variable("null", core.anyType);
 
 const tests = [
   ["folds +", core.binary("+", 5, 8), 13],
@@ -24,6 +22,8 @@ const tests = [
   // Additional tests to check optimizer behavior
   ["optimizes +0", core.binary("+", x, 0, core.intType), x],
   ["optimizes 0+", core.binary("+", 0, x, core.intType), x],
+  ["optimizes -0", core.binary("-", x, 0, core.intType), x],
+  ["optimizes +0", core.binary("+", x, 0, core.intType), x],
   ["optimizes 1*", core.binary("*", 1, x, core.intType), x],
   ["optimizes *1", core.binary("*", x, 1, core.intType), x],
   ["optimizes /1", core.binary("/", x, 1, core.intType), x],
@@ -31,7 +31,6 @@ const tests = [
   ["optimizes 0*", core.binary("*", 0, x, core.intType), 0],
   ["optimizes 0/", core.binary("/", 0, x, core.intType), 0],
   ["optimizes 1*", core.binary("*", 1, x, core.intType), x],
-  // Logical optimizations
   [
     "removes left false from or",
     core.binary(

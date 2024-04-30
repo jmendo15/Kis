@@ -120,11 +120,17 @@ const optimizers = {
     if (e.op === "+" && e.right === 0) {
       return e.left;
     }
+    if (e.op === "+" && e.right === 0) {
+      return e.left; 
+    }
     if (e.op === "-" && e.right === 0) {
       return e.left;
     }
     if (e.op === "-" && e.left === 0) {
       return e.right;
+    }
+    if (e.op === "-" && e.right === 0) {
+      return e.left;
     }
     if (e.op === "or" && e.left === false) {
       return e.right;
@@ -166,19 +172,6 @@ const optimizers = {
       }
     }
     return e;
-    // // Check if both operands are strings and the operation is concatenation
-    // if (
-    //   e.op === "+" &&
-    //   e.left.type.kind === "StringType" &&
-    //   e.right.type.kind === "StringType"
-    // ) {
-    //   // Assuming that values are stored in 'name' property and it's a simplified scenario
-    //   return {
-    //     kind: "Variable",
-    //     name: e.left.name + e.right.name,
-    //     type: { kind: "StringType" },
-    //   };
-    // }
   },
   UnaryExpression(e) {
     e.operand = optimize(e.operand);
