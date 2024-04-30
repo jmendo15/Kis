@@ -19,6 +19,10 @@ const semanticChecks = [
     "for loop with break",
     'set cats = ["garfield", "cleopatra", "sphinx"] fur cat in cats: if cat == "sphinx" || cat == "garfield": break else: meow(cat) nap nap',
   ],
+  [
+    "while loop with break print evens",
+    'set max = 10 set i = 0 whisker i < max: if i % 2 == 0: meow(i) nap nap',
+  ],
 
   [
     "function calling and mathematical operations",
