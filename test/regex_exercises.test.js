@@ -38,8 +38,8 @@ const testFixture = {
         ],
     },
     notThreeEndingInOO: {
-        good: ["", "fog", "Tho", "one", "a", "ab", "food"],
-        bad: ["fOo", "gOO", "HoO", "zoo", "MOO", "123", "A15"],
+        good: ["", "fog", "Tho", "one", "a", "ab", "food", "123", "A15"],
+        bad: ["fOo", "gOO", "HoO", "zoo", "MOO"],
     },
     divisibleBy16: {
         good: ["0", "00", "000", "00000", "00000", "000000", "00000000", "1101000000"],
