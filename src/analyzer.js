@@ -105,6 +105,23 @@ export default function analyze(match) {
       at
     );
   }
+  function isTypeCompatible(sourceType, targetType) {
+    if (sourceType === targetType) {
+      return true; // Same type can always be assigned
+    } else if (sourceType === INT && targetType === FLOAT) {
+      return true; // Example: allowing int to be assigned to float
+    }
+    return false; // Other cases are incompatible
+  }
+
+  function mustBeAssignable(source, target, at) {
+    const isCompatible = isTypeCompatible(source.type, target.type);
+    must(
+      isCompatible,
+      `Type mismatch: cannot assign ${source.type} to ${target.type}`,
+      at
+    );
+  }
 
   // Building the program representation will be done together with semantic
   // analysis and error checking. In Ohm, we do this with a semantics object
@@ -143,6 +160,7 @@ export default function analyze(match) {
       mustHaveBeenFound(target, id.sourceString, { at: id });
       const source = exp.rep();
       // TODO mustBeAssignable(target, initializer, { at: id });
+
       return core.assignment(target, source);
     },
 

@@ -39,6 +39,16 @@ const semanticErrors = [
     "reset x = 10",
     /Identifier x not declared/,
   ],
+  [
+    "variable used before declaration",
+    "pounce x--",
+    /Identifier x not declared/,
+  ],
+  [
+    "return statement outside of function",
+    "purr 5",
+    /Return\s+can\s+only\s+appear\s+in\s+a\s+function/,
+  ],
 ];
 
 describe("Kis language analyzer", () => {
