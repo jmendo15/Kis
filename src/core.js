@@ -1,12 +1,3 @@
-import util from "util"
-
-export class Program {
-  constructor(statements) {
-    this.statements = statements
-  }
-}
-
-
 export function script(statements) {
   return { kind: "Script", statements };
 }
@@ -124,6 +115,10 @@ export function emptyOptional(baseType) {
   return { kind: "EmptyOptional", baseType, type: optionalType(baseType) };
 }
 
+export function block(statements) {
+  return { kind: "Block", statements };
+}
+
 export function subscript(array, index) {
   return {
     kind: "SubscriptExpression",
@@ -186,6 +181,5 @@ export const standardLibrary = Object.freeze({
 // just using JavaScript values for those. Fortunately we can monkey patch
 // the JS classes for these to give us what we want.
 String.prototype.type = stringType;
-Number.prototype.type = floatType;
-BigInt.prototype.type = intType;
+Number.prototype.type = intType;
 Boolean.prototype.type = boolType;

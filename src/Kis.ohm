@@ -1,9 +1,7 @@
 Kis {
 	Kis         = Stmt+                    -- script
                 | module id Export* "nap"  -- module
-
     Export      = export FuncDecl
-
     Stmt        = VarDecl
                 | FuncDecl
                 | StructDecl
@@ -16,38 +14,31 @@ Kis {
                 | BreakStmt
                 | IfStmt
                 | ImportStmt
-    
     VarDecl     = set id "=" Exp
     Assignment  = reset id "=" Exp
     StructDecl  = house id "{" Field* "}"
     Field       = id ":" Type
-    
     FuncDecl    = kitty id Params Block
     Params      = "(" ListOf<Param, ","> ")"
-    Param       = id ":" id?
+    Param       = id ":" id
     Type        = Type "?"                                   --optional
                 | "[" Type "]"                               --array
                 | "(" ListOf<Type, ","> ")" "->" Type        --function
                 | "isInt" "(" id ")"                         --isInt
                 | "isString" "(" id ")"                      --isString
                 | id                                         --id
-    
     PrintStmt   = "meow" "(" Exp ")"
-
     Block            = ":" Stmt* "nap"
     IfStmt           = if Exp ":" Stmt* else (Block | IfStmt)     --long
                      | if Exp Block                               --short
     WhileStmt        = while Exp Block
     ForStmt          = for id in Exp Block
     ImportStmt       = import id
-    IncrementStmt    = pounce Exp7 ("++" |"--")       --pounce              
+    IncrementStmt    = pounce Exp7 ("++" |"--")       --pounce
     BreakStmt        = break
     ReturnStatement  = return Exp
-    
-    Exp          = ("-" | "!") Exp7                            --unary
-                 | Exp1 "?" Exp1 ":" Exp                       --ternary
-                 | Exp1
-  
+    Exp              = Exp1 "?" Exp1 ":" Exp                       --ternary
+                     | Exp1
     Exp1          = Exp1 "||" Exp2                               --binary
                   | Exp1 "&&" Exp2  			      --addOrConcat
              	  | Exp2
@@ -59,28 +50,30 @@ Kis {
                   | Exp5
     Exp5          = Exp5 ("*" | "/" | "%") Exp6          --binary
                   | Exp6
-    Exp6          = Exp7 "**" Exp6                       --binary
-                  | Exp7
-    Exp7          = num
+    Exp6          = Exp8 "**" Exp6                       --binary
+                  | Exp8
+    Exp7          = ("-" | "!") Exp7                            --unary
+                  | Exp8
+    Exp8          = num
                   | true
                   | false
+                  | id "(" ListOf<Exp, ","> ")"        --call
                   | id                                 --id
                   | "(" Exp ")"                        --parens
                   | stringLiteral
-                  |"[" ArrayElements "]"                -- array 
-    
+                  |"[" ArrayElements "]"                -- array
     stringLiteral = "\"" (~"\"" any)* "\""
-    ArrayElements = Exp ("," Exp)*              -- expression
+    ArrayElements = ListOf<Exp, ",">
     if           = "if" ~alnum
     in           = "in" ~alnum
     elseif       = "elseif" ~alnum
     else         = "else" ~alnum
     for          = "fur" ~alnum
     while        = "whisker" ~alnum
-    class        = "class" ~alnum 
-    import       = "import" ~alnum 
-    export       = "export" ~alnum 
-    module       = "module" ~alnum 
+    class        = "class" ~alnum
+    import       = "import" ~alnum
+    export       = "export" ~alnum
+    module       = "module" ~alnum
     pounce    = "pounce" ~alnum
     break        = "break" ~alnum
     return       = "purr" ~alnum
