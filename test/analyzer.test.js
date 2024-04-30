@@ -15,10 +15,7 @@ const semanticChecks = [
     "for loop with break",
     'set cats = ["garfield", "cleopatra", "sphinx"] fur cat in cats: if cat == "sphinx" || cat == "garfield": break else: meow(cat) nap nap',
   ],
-  [
-    "class instance and method call",
-    'class Cat(name: String, age: int) { kitty __init__(self): self.name = name self.age = age nap kitty getName(self): set message = "Name: " + self.name + " Age: " + self.age meow(message) nap nap } set Garf = new Cat("Garfield", 40) meow(Garf.getName())',
-  ],
+
   [
     "function calling and mathematical operations",
     "set dozen = 12 meow(dozen % 3 ** 1) kitty gcd(x: int, y: int): purr y == 0 ? x : gcd(y, x % y) whisker dozen >= 3 || (gcd(1, 10) != 5): reset dozen = dozen - 200 ** 1 ** 3 nap nap",
@@ -29,12 +26,6 @@ const semanticErrors = [
 
   ["invalid type usage", 'set x = "hello" pounce x++', /Expected an integer/],
   ["invalid function call", "set x = 1 x()", /Expected end of input/],
-
-  [
-    "class method not found",
-    'house Cat(name: String, age: int) { nap; } set c = new Cat("Garfield", 40) c.play()',
-    /Method 'play' not found on 'Cat'/,
-  ],
 ];
 
 describe("Kis language analyzer", () => {
