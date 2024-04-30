@@ -82,7 +82,14 @@ export function shortReturnStatement() {
 export function ifStatement(test, consequent, alternate) {
   return { kind: "IfStatement", test, consequent, alternate };
 }
-
+export function longIfStatement(test, consequent, alternate) {
+  return {
+    type: "LongIfStatement", // You might name this just 'IfStatement' if you prefer
+    test: test,
+    consequent: consequent,
+    alternate: alternate,
+  };
+}
 export function shortIfStatement(test, consequent) {
   return { kind: "ShortIfStatement", test, consequent };
 }
@@ -177,6 +184,5 @@ export const standardLibrary = Object.freeze({
 // just using JavaScript values for those. Fortunately we can monkey patch
 // the JS classes for these to give us what we want.
 String.prototype.type = stringType;
-Number.prototype.type = floatType;
-BigInt.prototype.type = intType;
+Number.prototype.type = intType;
 Boolean.prototype.type = boolType;

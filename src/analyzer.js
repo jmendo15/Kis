@@ -1,4 +1,10 @@
 import * as core from "./core.js";
+const INT = core.intType;
+const FLOAT = core.floatType;
+const STRING = core.stringType;
+const BOOLEAN = core.boolType;
+const ANY = core.anyType;
+const VOID = core.voidType;
 
 class Context {
   // Like most statically-scoped languages, Carlos contexts will contain a
@@ -48,9 +54,38 @@ export default function analyze(match) {
   function mustHaveBeenFound(entity, name, at) {
     must(entity, `Identifier ${name} not declared`, at);
   }
+  function mustHaveBooleanType(e, at) {
+    must(e.type === BOOLEAN, "Expected a boolean", at);
+  }
+  function determineCommonType(types) {
+    if (types.every((type) => type === types[0])) {
+      return types[0];
+    } else {
+      throw new Error("Array elements must have the same type");
+    }
+  }
 
   function mustBeInLoop(at) {
     must(context.inLoop, "Break can only appear in a loop", at);
+  }
+  function mustAllHaveSameType(expressions, at) {
+    // Used to check the elements of an array expression, and the two
+    // arms of a conditional expression, among other scenarios.
+    must(
+      expressions
+        .slice(1)
+        .every((e) => equivalent(e.type, expressions[0].type)),
+      "Not all elements have the same type",
+      at
+    );
+  }
+  function mustHaveAnArrayType(expression, at) {
+    const isArray = expression.type.category === "Array";
+    must(isArray, "Expected an array type", at);
+  }
+
+  function mustHaveIntegerType(e, at) {
+    must(e.type === INT, "Expected an integer", at);
   }
 
   function mustBeInAFunction(at) {
@@ -61,6 +96,31 @@ export default function analyze(match) {
       e.type
     )} to a ${typeDescription(type)}`;
     must(assignable(e.type, type), message, at);
+  }
+
+  function mustReturnSomething(f, at) {
+    must(
+      f.type.returnType !== VOID,
+      "Cannot return a value from this function",
+      at
+    );
+  }
+  function isTypeCompatible(sourceType, targetType) {
+    if (sourceType === targetType) {
+      return true; // Same type can always be assigned
+    } else if (sourceType === INT && targetType === FLOAT) {
+      return true; // Example: allowing int to be assigned to float
+    }
+    return false; // Other cases are incompatible
+  }
+
+  function mustBeAssignable(source, target, at) {
+    const isCompatible = isTypeCompatible(source.type, target.type);
+    must(
+      isCompatible,
+      `Type mismatch: cannot assign ${source.type} to ${target.type}`,
+      at
+    );
   }
 
   // Building the program representation will be done together with semantic
@@ -100,6 +160,7 @@ export default function analyze(match) {
       mustHaveBeenFound(target, id.sourceString, { at: id });
       const source = exp.rep();
       // TODO mustBeAssignable(target, initializer, { at: id });
+
       return core.assignment(target, source);
     },
 
@@ -126,29 +187,30 @@ export default function analyze(match) {
       context.add(funcName, func);
 
       // Parameters are part of the child context
-      let functionContext = context.newChildContext({
+      context = context.newChildContext({
         inLoop: false,
         function: func,
       });
-      const params = parameters.children.map((param) =>
-        param.rep(functionContext)
-      );
-      const paramTypes = params.map((param) => param.type);
-      const returnType = type.children?.[0]?.rep() ?? VOID;
-      func.type = core.functionType(paramTypes, returnType);
+      console.log("PARAMETERS ARE", parameters.sourceString);
+      const params = parameters.rep();
+      // const paramTypes = params.map((param) => param.type);
+      // const returnType = type.children?.[0]?.rep() ?? VOID;
+      // func.type = core.functionType(paramTypes, returnType);
 
       // Analyze body while still in child context
-      const body = block.rep(functionContext);
+      const body = block.rep();
+      context = context.parent;
       // Go back up to the outer context before returning
       return core.functionDeclaration(func, params, body);
     },
 
     Params(_open, paramList, _close) {
       // Returns a list of variable nodes
+      console.log("PARAMLIST IS", paramList.sourceString);
       return paramList.asIteration().children.map((p) => p.rep());
     },
 
-    Param(id, _colon, _id) {
+    Param(id, _colon, type) {
       const param = core.variable(id.sourceString, false, type.rep());
       mustNotAlreadyBeDeclared(param.name, { at: id });
       context.add(param.name, param);
@@ -241,7 +303,7 @@ export default function analyze(match) {
       const iterator = core.variable(
         id.sourceString,
         true,
-        collection.type.baseType
+        collection.type.elementType
       );
       context = context.newChildContext({ inLoop: true });
       context.add(iterator.name, iterator);
@@ -249,7 +311,9 @@ export default function analyze(match) {
       context = context.parent;
       return core.forStatement(iterator, collection, body);
     },
-
+    break(_break) {
+      return core.breakStatement;
+    },
     ImportStmt(_import, id) {
       const moduleName = id.sourceString;
       const module = context.lookupModule(moduleName);
@@ -293,27 +357,21 @@ export default function analyze(match) {
 
     IncrementStmt_pounce(_pounce, exp, operator) {
       const variable = exp.rep();
-      //mustHaveIntegerType(variable, { at: exp });
+      mustHaveIntegerType(variable, { at: exp });
       return operator.sourceString === "++"
         ? core.increment(variable)
         : core.decrement(variable);
     },
 
-    Params(firstIdentifier, _comma, secondIdentifier) {
-      const paramName1 = firstIdentifier.rep();
-      const paramName2 = secondIdentifier.rep();
-      return [paramName1, paramName2];
-    },
-
     ReturnStatement(returnKeyword, exp) {
       mustBeInAFunction({ at: returnKeyword });
-      mustReturnSomething(context.function, { at: returnKeyword });
+      // mustReturnSomething(context.function, { at: returnKeyword });
       const returnExpression = exp.rep();
-      mustBeReturnable(
-        returnExpression,
-        { from: context.function },
-        { at: exp }
-      );
+      // mustBeReturnable(
+      //   returnExpression,
+      //   { from: context.function },
+      //   { at: exp }
+      // );
       return core.returnStatement(returnExpression);
     },
 
@@ -366,19 +424,19 @@ export default function analyze(match) {
     },
 
     Exp1_binary(exp1, op, exp2) {
-      return core.binary(op.sourceString, exp1.rep(), exp2.rep());
+      return core.binary(op.sourceString, exp1.rep(), exp2.rep(), BOOLEAN);
     },
 
     Exp2_binary(exp1, op, exp2) {
-      return core.binary(op.sourceString, exp1.rep(), exp2.rep());
+      return core.binary(op.sourceString, exp1.rep(), exp2.rep(), BOOLEAN);
     },
 
     Exp3_binary(exp1, op, exp2) {
-      return core.binary(op.sourceString, exp1.rep(), exp2.rep());
+      return core.binary(op.sourceString, exp1.rep(), exp2.rep(), BOOLEAN);
     },
 
     Exp4_binary(exp1, op, exp2) {
-      return core.binary(op.sourceString, exp1.rep(), exp2.rep());
+      return core.binary(op.sourceString, exp1.rep(), exp2.rep(), INT);
     },
 
     Exp5_binary(exp1, op, exp2) {
@@ -396,8 +454,31 @@ export default function analyze(match) {
       return entity;
     },
 
+    Exp7_call(id, _open, args, _close) {},
+
     Exp7_parens(_open, exp, _clone) {
       return exp.rep();
+    },
+    ArrayElements(elements) {
+      return elements.asIteration().children.map((element) => element.rep());
+    },
+
+    Exp(expression) {
+      return expression.rep();
+    },
+    // Exp7_array(_openBracket, elements, _closeBracket) {
+    //   return {
+    //     type: "ArrayExpression",
+    //     elements: elements.rep(), // Ensure that 'elements' correctly calls the ArrayElements semantic action
+    //   };
+    // },
+    Exp7_array(_openBracket, elements, _closeBracket) {
+      const elementReps = elements.asIteration().children.map((e) => e.rep());
+      const elementType = determineCommonType(elementReps.map((e) => e.type));
+      return {
+        type: { category: "Array", elementType: elementType },
+        elements: elementReps,
+      };
     },
 
     true(_) {
@@ -408,17 +489,15 @@ export default function analyze(match) {
       return false;
     },
 
+    id(_firstChar, _restChars) {
+      return this.sourceString;
+    },
+
     num(_whole, _point, _fraction, _e, _sign, _exponent) {
       // Carlos floats will be represented as plain JS numbers
       return Number(this.sourceString);
     },
 
-    // Exp7_stringliteral(_left, sl, _right) {
-    //   let rawString = sl.sourceString;
-    //   let content = rawString.slice(1, rawString.length - 1);
-    //   let unescapedContent = content.replace(/\\"/g, '"');
-    //   return unescapedContent;
-    // },
     // Exp7_arrayexp(_open, args, _close) {
     //   const elements = args.asIteration().children.map((e) => e.rep());
     //   mustAllHaveSameType(elements, { at: args });

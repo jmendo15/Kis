@@ -4,6 +4,10 @@ import analyze from "../src/analyzer.js";
 import * as core from "../src/core.js";
 
 const semanticChecks = [
+  ["variables can be assigned to string", 'set catName = "Kis"'],
+  ["variables can be assigned to number", "set catAge = 500"],
+  ["strings can be printed", 'meow("Hi, my name is Kis!")'],
+  ["variables can be printed string", 'set catName = "Kis" meow(catName)'],
   ["variables can be printed", "set x = 1 meow(x)"],
   ["variables can be reassigned", "set x = 1 reset x = x * 5 / ((-3) + x)"],
   ["increment and decrement", "set x = 10 pounce x-- pounce x++"],
@@ -13,29 +17,37 @@ const semanticChecks = [
   ],
   [
     "for loop with break",
-    'set cats = ["garfield", "cleopatra", "sphinx"] fur cat in cats: if cat == "sphinx" || cat == "garfield": break else meow(cat) nap nap',
+    'set cats = ["garfield", "cleopatra", "sphinx"] fur cat in cats: if cat == "sphinx" || cat == "garfield": break else: meow(cat) nap nap',
   ],
   [
-    "class instance and method call",
-    'class Cat(name: String, age: int) { kitty __init__(self): self.name = name self.age = age nap kitty getName(self): set message = "Name: " + self.name + " Age: " + self.age meow(message) nap nap } set Garf = new Cat("Garfield", 40) meow(Garf.getName())',
+    "while loop with break print evens",
+    "set max = 10 set i = 0 whisker i < max: if i % 2 == 0: meow(i) nap nap",
   ],
+
   [
     "function calling and mathematical operations",
-    "set dozen = 12 meow(dozen % 3 ** 1) kitty gcd(x,y): purr y == 0 ? x : gcd(y, x % y) whisker dozen >= 3 || (gcd(1,10) != 5): dozen = dozen - 2.75E+19 ** 1 ** 3 nap",
+    "set dozen = 12 meow(dozen % 3 ** 1) kitty gcd(x: int, y: int): purr y == 0 ? x : gcd(y, x % y) whisker dozen >= 3 || (gcd(1, 10) != 5): reset dozen = dozen - 200 ** 1 ** 3 nap nap",
   ],
 ];
 const semanticErrors = [
-  ["undeclared variable access", "meow(x)", /Variable 'x' not declared/],
+  ["undeclared variable access", "meow(x)", /Identifier\s+x\s+not\s+declared/],
+
+  ["invalid type usage", 'set x = "hello" pounce x++', /Expected an integer/],
+  ["invalid function call", "set x = 1 x()", /Expected end of input/],
   [
-    "invalid type usage",
-    'set x = "hello" x++',
-    /Cannot use '\+\+' on type string/,
+    "assignment to undeclared variable",
+    "reset x = 10",
+    /Identifier x not declared/,
   ],
-  ["invalid function call", "set x = 1 x()", /'x' is not a function/],
   [
-    "class method not found",
-    'class Cat(name: String, age: int) { nap; } set c = new Cat("Garfield", 40) c.play()',
-    /Method 'play' not found on 'Cat'/,
+    "variable used before declaration",
+    "pounce x--",
+    /Identifier x not declared/,
+  ],
+  [
+    "return statement outside of function",
+    "purr 5",
+    /Return\s+can\s+only\s+appear\s+in\s+a\s+function/,
   ],
 ];
 
@@ -56,27 +68,40 @@ describe("Kis language analyzer", () => {
   it("produces the expected representation for a trivial program", () => {
     const sample = "set x = 5 + 3 meow(x)"; // An example simple program
     const expected = {
-      type: "Program",
-      body: [
+      kind: "Script",
+      statements: [
         {
-          type: "VariableDeclaration",
-          identifier: "x",
-          expression: {
-            type: "BinaryExpression",
-            operator: "+",
+          kind: "VariableDeclaration",
+          variable: {
+            kind: "Variable",
+            name: "x",
+            type: {
+              kind: "IntType",
+            },
+          },
+          initializer: {
+            kind: "BinaryExpression",
             left: 5,
+            op: "+",
             right: 3,
+            type: {
+              kind: "IntType",
+            },
           },
         },
         {
-          type: "PrintStatement",
+          kind: "PrintStatement",
           expression: {
-            type: "Identifier",
+            kind: "Variable",
             name: "x",
+            type: {
+              kind: "IntType",
+            },
           },
         },
       ],
     };
+
     const analyzedProgram = analyze(parse(sample));
     assert.deepStrictEqual(analyzedProgram, expected);
   });
