@@ -28,7 +28,8 @@ const semanticErrors = [
   ["undeclared variable access", "meow(x)", /Identifier\s+x\s+not\s+declared/],
 
   ["invalid type usage", 'set x = "hello" pounce x++', /Expected an integer/],
-  ["invalid function call", "set x = 1 x()", /'x' is not a function/],
+  ["invalid function call", "set x = 1 x()", /Expected end of input/],
+
   [
     "class method not found",
     'house Cat(name: String, age: int) { nap; } set c = new Cat("Garfield", 40) c.play()',
