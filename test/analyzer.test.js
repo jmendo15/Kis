@@ -4,6 +4,10 @@ import analyze from "../src/analyzer.js";
 import * as core from "../src/core.js";
 
 const semanticChecks = [
+  ['variables can be assigned to string', 'set catName = "Kis"'],
+  ['variables can be assigned to number', 'set catAge = 500'],
+  ['strings can be printed', 'meow("Hi, my name is Kis!")'],
+  ['variables can be printed string', 'set catName = "Kis" meow(catName)'],
   ["variables can be printed", "set x = 1 meow(x)"],
   ["variables can be reassigned", "set x = 1 reset x = x * 5 / ((-3) + x)"],
   ["increment and decrement", "set x = 10 pounce x-- pounce x++"],
