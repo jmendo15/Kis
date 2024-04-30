@@ -4,10 +4,10 @@ import analyze from "../src/analyzer.js";
 import * as core from "../src/core.js";
 
 const semanticChecks = [
-  ['variables can be assigned to string', 'set catName = "Kis"'],
-  ['variables can be assigned to number', 'set catAge = 500'],
-  ['strings can be printed', 'meow("Hi, my name is Kis!")'],
-  ['variables can be printed string', 'set catName = "Kis" meow(catName)'],
+  ["variables can be assigned to string", 'set catName = "Kis"'],
+  ["variables can be assigned to number", "set catAge = 500"],
+  ["strings can be printed", 'meow("Hi, my name is Kis!")'],
+  ["variables can be printed string", 'set catName = "Kis" meow(catName)'],
   ["variables can be printed", "set x = 1 meow(x)"],
   ["variables can be reassigned", "set x = 1 reset x = x * 5 / ((-3) + x)"],
   ["increment and decrement", "set x = 10 pounce x-- pounce x++"],
@@ -21,7 +21,7 @@ const semanticChecks = [
   ],
   [
     "while loop with break print evens",
-    'set max = 10 set i = 0 whisker i < max: if i % 2 == 0: meow(i) nap nap',
+    "set max = 10 set i = 0 whisker i < max: if i % 2 == 0: meow(i) nap nap",
   ],
 
   [
@@ -54,26 +54,39 @@ describe("Kis language analyzer", () => {
     const sample = "set x = 5 + 3 meow(x)"; // An example simple program
     const expected = {
       kind: "Script",
-      body: [
+      statements: [
         {
           kind: "VariableDeclaration",
-          identifier: "x",
-          expression: {
+          variable: {
+            kind: "Variable",
+            name: "x",
+            type: {
+              kind: "IntType",
+            },
+          },
+          initializer: {
             kind: "BinaryExpression",
-            operator: "+",
             left: 5,
+            op: "+",
             right: 3,
+            type: {
+              kind: "IntType",
+            },
           },
         },
         {
           kind: "PrintStatement",
           expression: {
-            kind: "Identifier",
+            kind: "Variable",
             name: "x",
+            type: {
+              kind: "IntType",
+            },
           },
         },
       ],
     };
+
     const analyzedProgram = analyze(parse(sample));
     assert.deepStrictEqual(analyzedProgram, expected);
   });
