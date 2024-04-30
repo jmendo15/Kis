@@ -1,0 +1,3 @@
+import geometry
+set circleArea = geometry.calculateArea(5.0)
+meow(circleArea)
