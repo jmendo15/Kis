@@ -34,6 +34,11 @@ const semanticErrors = [
 
   ["invalid type usage", 'set x = "hello" pounce x++', /Expected an integer/],
   ["invalid function call", "set x = 1 x()", /Expected end of input/],
+  [
+    "assignment to undeclared variable",
+    "reset x = 10",
+    /Identifier x not declared/,
+  ],
 ];
 
 describe("Kis language analyzer", () => {
