@@ -161,10 +161,8 @@ nap
 
 ### Example Mathematics
 
-- For loops in PokerScript must have two or three statements within them.
-
 <table>
-<tr> <th>JavaScript</th><th>PokerScript</th><tr>
+<tr> <th>JavaScript</th><th>Kis</th><tr>
 </tr>
 
 <td>
