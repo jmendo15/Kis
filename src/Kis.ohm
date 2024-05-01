@@ -82,7 +82,7 @@ Kis {
     import       = "import" ~alnum 
     export       = "export" ~alnum 
     module       = "module" ~alnum 
-    pounce    = "pounce" ~alnum
+    pounce       = "pounce" ~alnum
     break        = "break" ~alnum
     return       = "purr" ~alnum
     endkw        = "nap" ~alnum

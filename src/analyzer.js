@@ -79,6 +79,12 @@ export default function analyze(match) {
       at
     );
   }
+
+  function mustBeCallable(e, at) {
+    const callable = e?.kind === "FunctionType";
+    must(callable, "Call of non-function or non-constructor", at);
+  }
+
   function mustHaveAnArrayType(expression, at) {
     const isArray = expression.type.category === "Array";
     must(isArray, "Expected an array type", at);
@@ -99,11 +105,12 @@ export default function analyze(match) {
   }
 
   function mustReturnSomething(f, at) {
-    must(
-      f.type.returnType !== VOID,
-      "Cannot return a value from this function",
-      at
-    );
+    return true;
+    // must(
+    //   f.type.returnType !== VOID,
+    //   "Cannot return a value from this function",
+    //   at
+    // );
   }
   function isTypeCompatible(sourceType, targetType) {
     if (sourceType === targetType) {
@@ -193,12 +200,14 @@ export default function analyze(match) {
       });
       console.log("PARAMETERS ARE", parameters.sourceString);
       const params = parameters.rep();
-      // const paramTypes = params.map((param) => param.type);
-      // const returnType = type.children?.[0]?.rep() ?? VOID;
+      func.params = params;
+      const paramTypes = params.map((param) => param.type);
+      // // const returnType = type.children?.[0]?.rep() ?? VOID;
       // func.type = core.functionType(paramTypes, returnType);
 
       // Analyze body while still in child context
       const body = block.rep();
+      // func.type = core.functionType(params, body.type);
       context = context.parent;
       // Go back up to the outer context before returning
       return core.functionDeclaration(func, params, body);
@@ -211,7 +220,7 @@ export default function analyze(match) {
     },
 
     Param(id, _colon, type) {
-      const param = core.variable(id.sourceString, false, type.rep());
+      const param = core.variable(id.sourceString, type.rep());
       mustNotAlreadyBeDeclared(param.name, { at: id });
       context.add(param.name, param);
       return param;
@@ -454,7 +463,22 @@ export default function analyze(match) {
       return entity;
     },
 
-    Exp7_call(id, _open, args, _close) {},
+    Exp7_call(id, _open, args, _close) {
+      const func = context.lookup(id.sourceString);
+      mustHaveBeenFound(func, id.sourceString, { at: id });
+      // mustBeCallable(func, { at: id });
+      const callArguments = args.asIteration().children.map((a) => a.rep());
+      const parameters = func.params;
+      must(
+        callArguments.length === parameters.length,
+        `Expected ${parameters.length} args but got ${callArguments.length}`,
+        { at: args }
+      );
+      // for (let i = 0; i < callArguments.length; i++) {
+      //   mustBeAssignable(callArguments[i], parameters[i], { at: args });
+      // }
+      return core.functionCall(func, callArguments);
+    },
 
     Exp7_parens(_open, exp, _clone) {
       return exp.rep();

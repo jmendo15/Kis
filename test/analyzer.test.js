@@ -51,8 +51,8 @@ const semanticErrors = [
   ],
   [
     "function call with wrong number of arguments",
-    "kitty sum(a: int, b: int): purr a + b; sum(1);",
-    /Incorrect number of arguments/,
+    "kitty sum(a: int, b: int): purr a + b nap meow(sum(1))",
+    /Expected 2 args but got 1/,
   ],
 ];
 
