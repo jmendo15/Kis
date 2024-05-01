@@ -15,8 +15,8 @@ Kis also places a strong emphasis on immutability, offering immutable data types
 # Authors:
 
 Jerahmeel Mendoza,
-Jordan Shiu,
 Kalif Byrd,
+Jordan Shiu,
 Sarron Tadesse,
 Joanna Estrada,
 
