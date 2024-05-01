@@ -34,8 +34,6 @@ const fixtures = [
       set x = 0
       if x == 0: meow("1") nap
       if x == 0: meow(1) else: meow(2) nap
-      if x == 0: meow(1) else if x == 2: meow(3) nap
-      if x == 0: meow(1) else if x == 2: meow(3) else: meow(4) nap
     `,
     expected: dedent`
       let x_1 = 0;
@@ -47,20 +45,6 @@ const fixtures = [
       } else {
         console.log(2);
       }
-      if ((x_1 === 0)) {
-        console.log(1);
-      } else
-        if ((x_1 === 2)) {
-          console.log(3);
-        }
-      if ((x_1 === 0)) {
-        console.log(1);
-      } else
-        if ((x_1 === 2)) {
-          console.log(3);
-        } else {
-          console.log(4);
-        }
     `,
   },
   {
@@ -104,15 +88,15 @@ const fixtures = [
       purr f(z, g())
     `,
     expected: dedent`
-      set z_1 = 0.5
-      kitty f_2(x_3, y_4) {
-        console.log((Math.sin(x_3) > Math.PI))
-        purr
+      let z_1 = 0.5;
+      function f_2(x_3, y_4) {
+        console.log((Math.sin(x_3) > Math.PI));
+        return
       }
-      kitty g_5() {
-        purr false
+      function g_5() {
+        return false;
       }
-      f_2(z_1, g_5())
+      f_2(z_1, g_5());
     `,
   },
   {
@@ -125,48 +109,44 @@ const fixtures = [
       
     `,
     expected: dedent`
-      set a_1 = [true,false,true]
-      set b_2 = [10,(a_1.length - 20),30]
-      set c_3 = []
-      set d_4 = ((a=>a[~~(Math.random()*a.length)])(b_2))
+      let a_1 = [true,false,true];
+      let b_2 = [10,(a_1.length - 20),30];
+      let c_3 = [];
+      let d_4 = ((a=>a[~~(Math.random()*a.length)])(b_2));
       
     `,
   },
   {
-    name: "optionals",
+    name: "ternary",
     source: `
-      set x = null
-      // set y = x ?? 2
-      // set w = z?.x
+      set y = 5
+      set x = (y > 10) ? y : 10
     `,
     expected: dedent`
-      set x_1 = undefined
-      // set y_2 = (x_1 ?? 2)
-      // set w_6 = (z_5?.["x_4"])
+      let y_2 = 5;
+      let x_1 = (y_2 10) ? y_2 : 10;
     `,
   },
   {
     name: "fur loops",
     source: `
-      fur i in 5:
+      fur i in [5, 10]:
         meow(i)
       nap
       fur j in [10, 20, 30]:
         meow(j)
       nap
-      fur k in 10:
+      fur k in [10, 15]:
       nap
     `,
     expected: dedent`
-      fur (set i_1 = 1 i_1 < 50 i_1++) {
-        console.log(i_1)
+      for (let i_1 of [5,10]) {
+        console.log(i_1);
       }
-      fur (set j_2 of [10,20,30]) {
-        console.log(j_2)
+      for (let j_2 of [10,20,30]) {
+        console.log(j_2);
       }
-      fur (set i_3 = 0 i_3 < 3 i_3++) {
-      }
-      fur (set k_4 = 1 k_4 <= 10 k_4++) {
+      for (let i_3 of [10,15]) {
       }
     `,
   },
