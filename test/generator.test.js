@@ -20,12 +20,12 @@ const fixtures = [
       meow((y && y) || false || (x*2) != 5)
     `,
     expected: dedent`
-      set x_1 = 21
-      x_1++
-      x_1--
-      set y_2 = true
-      y_2 = (((5 ** -(x_1)) / -(100)) > -(x_1))
-      console.log(((y_2 && y_2) || ((x_1 * 2) !== 5)))
+      let x_1 = 21;
+      x_1++;
+      x_1--;
+      let y_2 = true;
+      y_2 = (((5 ** -(x_1)) / -(100)) > -(x_1));
+      console.log(((y_2 && y_2) || ((x_1 * 2) !== 5)));
     `,
   },
   {
@@ -38,28 +38,28 @@ const fixtures = [
       if x == 0: meow(1) else if x == 2: meow(3) else: meow(4) nap
     `,
     expected: dedent`
-      set x_1 = 0
+      let x_1 = 0;
       if ((x_1 === 0)) {
-        console.log("1")
+        console.log("1");
       }
       if ((x_1 === 0)) {
-        console.log(1)
+        console.log(1);
       } else {
-        console.log(2)
+        console.log(2);
       }
       if ((x_1 === 0)) {
-        console.log(1)
+        console.log(1);
       } else
         if ((x_1 === 2)) {
-          console.log(3)
+          console.log(3);
         }
       if ((x_1 === 0)) {
-        console.log(1)
+        console.log(1);
       } else
         if ((x_1 === 2)) {
-          console.log(3)
+          console.log(3);
         } else {
-          console.log(4)
+          console.log(4);
         }
     `,
   },
