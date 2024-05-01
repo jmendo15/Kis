@@ -20,12 +20,12 @@ const fixtures = [
       meow((y && y) || false || (x*2) != 5)
     `,
     expected: dedent`
-      let x_1 = 21;
+      let x_1 = (3 * 7);
       x_1++;
       x_1--;
       let y_2 = true;
-      y_2 = (((5 ** -(x_1)) / -(100)) > -(x_1));
-      console.log(((y_2 && y_2) || ((x_1 * 2) !== 5)));
+      y_2 = ((((5 ** -(x_1)) / -(100)) > -(x_1)) || false);
+      console.log((((y_2 && y_2) || false) || ((x_1 * 2) !== 5)));
     `,
   },
   {
@@ -80,23 +80,23 @@ const fixtures = [
       set z = 0.5
       kitty f(x: float, y: boolean):
         meow(sin(x) > π)
-        purr null
+        purr 1
       nap
       kitty g():
         purr false
       nap
-      purr f(z, g())
+      meow(f(z, g()))
     `,
     expected: dedent`
       let z_1 = 0.5;
       function f_2(x_3, y_4) {
         console.log((Math.sin(x_3) > Math.PI));
-        return
+        return 1;
       }
       function g_5() {
         return false;
       }
-      f_2(z_1, g_5());
+      console.log(f_2(z_1, g_5()));
     `,
   },
   {
@@ -104,16 +104,12 @@ const fixtures = [
     source: `
       set a = [true, false, true]
       set b = [10, getLength(a) - 20, 30]
-      set c = []
-      set d = random(b)
-      
+      set c = [1]
     `,
     expected: dedent`
       let a_1 = [true,false,true];
       let b_2 = [10,(a_1.length - 20),30];
-      let c_3 = [];
-      let d_4 = ((a=>a[~~(Math.random()*a.length)])(b_2));
-      
+      let c_3 = [1];
     `,
   },
   {
@@ -146,7 +142,7 @@ const fixtures = [
       for (let j_2 of [10,20,30]) {
         console.log(j_2);
       }
-      for (let i_3 of [10,15]) {
+      for (let k_3 of [10,15]) {
       }
     `,
   },

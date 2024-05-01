@@ -80,7 +80,7 @@ export default function analyze(match) {
     );
   }
   function mustHaveAnArrayType(expression, at) {
-    const isArray = expression.type.category === "Array";
+    const isArray = expression.type.kind === "ArrayType";
     must(isArray, "Expected an array type", at);
   }
 
@@ -280,12 +280,12 @@ export default function analyze(match) {
     },
 
     IfStmt_short(_if, exp, block) {
-      const test = exp.rep()
-      mustHaveBooleanType(test, { at: exp })
-      context = context.newChildContext()
-      const consequent = block.rep()
-      context = context.parent
-      return core.shortIfStatement(test, consequent)
+      const test = exp.rep();
+      mustHaveBooleanType(test, { at: exp });
+      context = context.newChildContext();
+      const consequent = block.rep();
+      context = context.parent;
+      return core.shortIfStatement(test, consequent);
     },
 
     WhileStmt(_while, exp, block) {
@@ -300,11 +300,7 @@ export default function analyze(match) {
     ForStmt(_for, id, _in, exp, block) {
       const collection = exp.rep();
       mustHaveAnArrayType(collection, { at: exp });
-      const iterator = core.variable(
-        id.sourceString,
-        true,
-        collection.type.elementType
-      );
+      const iterator = core.variable(id.sourceString, collection.type.baseType);
       context = context.newChildContext({ inLoop: true });
       context.add(iterator.name, iterator);
       const body = block.rep();
@@ -440,11 +436,11 @@ export default function analyze(match) {
     },
 
     Exp5_binary(exp1, op, exp2) {
-      return core.binary(op.sourceString, exp1.rep(), exp2.rep());
+      return core.binary(op.sourceString, exp1.rep(), exp2.rep(), INT);
     },
 
     Exp6_binary(exp1, op, exp2) {
-      return core.binary(op.sourceString, exp1.rep(), exp2.rep());
+      return core.binary(op.sourceString, exp1.rep(), exp2.rep(), INT);
     },
 
     Exp7_id(id) {
@@ -474,11 +470,12 @@ export default function analyze(match) {
     // },
     Exp7_array(_openBracket, elements, _closeBracket) {
       const elementReps = elements.asIteration().children.map((e) => e.rep());
-      const elementType = determineCommonType(elementReps.map((e) => e.type));
-      return {
-        type: { category: "Array", elementType: elementType },
-        elements: elementReps,
-      };
+      // const elementType = determineCommonType(elementReps.map((e) => e.type));
+      // return {
+      //   type: { category: "Array", elementType: elementType },
+      //   elements: elementReps,
+      // };
+      return core.arrayExpression(elementReps);
     },
 
     true(_) {
