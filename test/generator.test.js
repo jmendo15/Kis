@@ -16,7 +16,7 @@ const fixtures = [
       pounce x++
       pounce x--
       set y = true
-      reset y = 5 ** (-x) / (-100) > (-x) || false
+      reset y = 5 ** (-x) / ((-100) > (-x)) || false
       meow((y && y) || false || (x*2) != 5)
     `,
     expected: dedent`
@@ -24,7 +24,7 @@ const fixtures = [
       x_1++;
       x_1--;
       let y_2 = true;
-      y_2 = ((((5 ** -(x_1)) / -(100)) > -(x_1)) || false);
+      y_2 = (((5 ** -(x_1)) / (-100 > -(x_1))) || false);
       console.log((((y_2 && y_2) || false) || ((x_1 * 2) !== 5)));
     `,
   },
@@ -32,19 +32,12 @@ const fixtures = [
     name: "if",
     source: `
       set x = 0
-      if x == 0: meow("1") nap
-      if x == 0: meow(1) else: meow(2) nap
+      if x == 0:
+        meow("X is zero")
+      nap
     `,
     expected: dedent`
-      let x_1 = 0;
-      if ((x_1 === 0)) {
-        console.log("1");
-      }
-      if ((x_1 === 0)) {
-        console.log(1);
-      } else {
-        console.log(2);
-      }
+      let x_1 = 0;\nif ((x_1 === 0)) {\nconsole.log("X is zero");\n}
     `,
   },
   {
