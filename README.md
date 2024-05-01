@@ -11,7 +11,7 @@ Kis is a sophisticated, statically-typed programming language designed by a cat,
 # Meet the Litter...
 
 Jerahmeel Mendoza, Kalif Byrd, Jordan Shiu, Joanna Estrada, Sarron Tadesse
-<img src="docs/The_Litter.png" height="400">
+<img src="docs/The_Litter.png" height="450">
 
 # Features:
 
