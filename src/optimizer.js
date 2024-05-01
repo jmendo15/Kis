@@ -3,6 +3,7 @@
 import * as core from "./core.js";
 
 export default function optimize(node) {
+  console.log(node.kind);
   return optimizers?.[node.kind]?.(node) ?? node;
 }
 

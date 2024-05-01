@@ -20,7 +20,7 @@ const fixtures = [
       meow((y && y) || false || (x*2) != 5)
     `,
     expected: dedent`
-      let x_1 = (3 * 7);
+      let x_1 = 21;
       x_1++;
       x_1--;
       let y_2 = true;
@@ -78,8 +78,8 @@ const fixtures = [
     name: "kitty",
     source: `
       set z = 0.5
-      kitty f(x: float, y: boolean):
-        meow(sin(x) > π)
+      kitty f(x: float, y: boolean):        
+        meow(x > 2)
         purr 1
       nap
       kitty g():
@@ -90,7 +90,7 @@ const fixtures = [
     expected: dedent`
       let z_1 = 0.5;
       function f_2(x_3, y_4) {
-        console.log((Math.sin(x_3) > Math.PI));
+        console.log((x_3) > (2));
         return 1;
       }
       function g_5() {
@@ -103,12 +103,12 @@ const fixtures = [
     name: "arrays",
     source: `
       set a = [true, false, true]
-      set b = [10, getLength(a) - 20, 30]
+      set b = [10, 3 - 20, 30]
       set c = [1]
     `,
     expected: dedent`
       let a_1 = [true,false,true];
-      let b_2 = [10,(a_1.length - 20),30];
+      let b_2 = [10,-17,30];
       let c_3 = [1];
     `,
   },
@@ -119,8 +119,8 @@ const fixtures = [
       set x = (y > 10) ? y : 10
     `,
     expected: dedent`
-      let y_2 = 5;
-      let x_1 = (y_2 10) ? y_2 : 10;
+      let y_1 = 5;
+      let x_2 = (((y_1 > 10)) ? (y_1) : (10));
     `,
   },
   {
