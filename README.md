@@ -20,7 +20,7 @@ Jerahmeel Mendoza, Kalif Byrd, Jordan Shiu, Joanna Estrada, Sarron Tadesse
 - Special cat-themed keywords
 - Operator Overloading (addOrConcat())
 
-## Keywords
+# Keywords:
 
 | Kis              | Traditional |
 | ---------------- | ----------- |
