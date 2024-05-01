@@ -92,6 +92,9 @@ import { calculateArea, square} from './geometry.js';
 const circleArea = calculateArea(5.0)
 console.log(circleArea)
 ```
+</td>
+
+<td>
 
 ```
 // In any file:
@@ -110,7 +113,6 @@ import geometry
 set circleArea = geometry.calculateArea(5.0)
 meow(circleArea)
 ```
-
 </td>
 </table>
 
