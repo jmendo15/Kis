@@ -7,8 +7,8 @@ export default function optimize(node) {
 }
 
 const optimizers = {
-  Program(p) {
-    p.statements = p.statements.flatMap(optmize);
+  Script(p) {
+    p.statements = p.statements.flatMap(optimize);
     return p;
   },
   VariableDeclaration(d) {
@@ -42,6 +42,10 @@ const optimizers = {
     return s;
   },
   BreakStatement(s) {
+    return s;
+  },
+  PrintStatement(s) {
+    s.expression = optimize(s.expression);
     return s;
   },
   ReturnStatement(s) {
@@ -121,7 +125,7 @@ const optimizers = {
       return e.left;
     }
     if (e.op === "+" && e.right === 0) {
-      return e.left; 
+      return e.left;
     }
     if (e.op === "-" && e.right === 0) {
       return e.left;
