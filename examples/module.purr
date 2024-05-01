@@ -1,6 +1,6 @@
 module geometry
     export kitty calculateArea(radius: float):
-        purr 3.14 * radius
+        purr 3.14 * radius * radius
     nap
 
     export kitty square(num:float):
