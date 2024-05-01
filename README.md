@@ -159,6 +159,50 @@ nap
 <td>
 </table>
 
+### Example Mathematics
+
+- For loops in PokerScript must have two or three statements within them.
+
+<table>
+<tr> <th>JavaScript</th><th>PokerScript</th><tr>
+</tr>
+
+<td>
+
+```javascript
+let dozen = 12
+
+console.log(dozen % 3 ** 1)
+
+function gcd(a, b) {
+    if (b === 0) {
+        return a;
+    } else {
+        return gcd(b, a % b);
+    }
+}
+```
+
+</td>
+
+<td>
+
+```
+set dozen = 12
+
+meow(dozen % 3 ** 1)
+
+kitty gcd(x: int,y: int):
+    purr y == 0 ? x : gcd(y, x % y) 
+    whisker dozen >= 3 || (gcd(1,10) != 5):
+        reset dozen = dozen - 200 ** 1 ** 3
+    nap 
+nap
+```
+
+</td>
+</table>
+
 
 # Kis Webpage:
 
