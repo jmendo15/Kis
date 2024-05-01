@@ -90,12 +90,8 @@ export{calculateArea, square}
 // In a different file:
 import { calculateArea, square} from './geometry.js';
 const circleArea = calculateArea(5.0)
-print(circleArea)
+console.log(circleArea)
 ```
-
-</td>
-
-<td>
 
 ```
 // In any file:
@@ -109,7 +105,7 @@ module geometry
     nap
 nap
 
-//In a different file:
+// In a different file:
 import geometry
 set circleArea = geometry.calculateArea(5.0)
 meow(circleArea)
@@ -117,6 +113,48 @@ meow(circleArea)
 
 </td>
 </table>
+
+
+### For-Loops
+
+<table>
+<tr> <th>JavaScript</th><th>Kis</th><tr>
+</tr>
+
+<td>
+
+```javascript
+const catNames = ["garfield", "cleopatra", "sphinx"];
+
+for (let i = 0; i < catNames.length; i++) {
+  console.log(catNames[i]);
+}
+
+for (let i = 0; i < catNames.length; i++) {
+  if catNames[i] === "cleopatra" {
+    console.log(catNames[i])
+  }
+}
+```
+
+</td>
+
+<td>
+
+```
+set cats = ["garfield", "cleopatra", "sphinx"]
+
+fur cat in cats:
+    meow(cat)
+nap
+
+fur cat in cats:
+    if cat == "cleopatra":
+        meow(cat)
+nap
+```
+
+<td>
 
 
 # Kis Webpage:

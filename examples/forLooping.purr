@@ -11,12 +11,8 @@ nap
 // Will print cleopatra
 
 fur cat in cats:
-    if cat == "sphinx" || cat == "garfield":
-        break
-    nap
-    else:
+    if cat == "cleopatra":
         meow(cat)
-    nap
 nap
 
 // NOTE:
