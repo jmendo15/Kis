@@ -152,7 +152,7 @@ export function memberExpression(object, op, field) {
 }
 
 export function functionCall(callee, args) {
-  return { kind: "FunctionCall", callee, args, type: callee.type.returnType };
+  return { kind: "FunctionCall", callee, args }; //, type: callee.type.returnType };
 }
 
 export function constructorCall(callee, args) {

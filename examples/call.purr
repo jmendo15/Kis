@@ -1,0 +1,5 @@
+kitty sum(a: int, b: int):
+  purr a + b
+nap
+
+meow(sum(1))
