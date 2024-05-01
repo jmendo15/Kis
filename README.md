@@ -4,7 +4,7 @@
 
 # Introduction:
 There was once a cat, and her name was Kis. She double majored in computer science and felinology (study of cats)
-at the Kitties Tech University. In her junior year of college she realized there were no programming languages designed by cats, they were all designed by these weird beings called, "humans." In the Spring of 2024, Kis set off to design her own programming language and named it after herself. Instead of using words like "print", "for", "while", "end", and "function", she chose words cats are more familiar with. In addition to that, this is how she described her language...
+at the Kitties Tech University. In her junior year of college she realized there were no programming languages designed by cats, they were all designed by these weird beings called, "humans." In the Spring of 2024, Kis set off to design her own programming language and named it after herself. Instead of using words like "print", "for", "while", "end", "function", and "class," she chose words cats are more familiar with. In addition to that, this is how she described her language...
 
 Kis is a sophisticated, statically-typed programming language designed by a cat, for all cats! Kis has several distinctive features. First, Kis features a module system, complete with import/export capabilities, encouraging modularity and code reuse. Second, Kis allows for more simple operator overloading with the built-in function 'addOrConcat()' which can concatenate expressions of any type. Lastly, Kis has several cat-themed keywords which allow this programming language to be fun and cat-friendly for any being who chooses to code with it.
 
