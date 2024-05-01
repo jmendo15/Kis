@@ -1,0 +1,10 @@
+set x = 0
+    whisker x < 5:
+    set y = 0
+    whisker y < 5:
+        meow(x * y)
+        reset y = y + 1
+        break
+    nap
+    reset x = x + 1
+nap

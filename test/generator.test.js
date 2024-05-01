@@ -1,11 +1,11 @@
-import assert from "node:assert/strict"
-import parse from "../src/parser.js"
-import analyze from "../src/analyzer.js"
-import optimize from "../src/optimizer.js"
-import generate from "../src/generator.js"
+import assert from "node:assert/strict";
+import parse from "../src/parser.js";
+import analyze from "../src/analyzer.js";
+import optimize from "../src/optimizer.js";
+import generate from "../src/generator.js";
 
 function dedent(s) {
-  return `${s}`.replace(/(?<=\n)\s+/g, "").trim()
+  return `${s}`.replace(/(?<=\n)\s+/g, "").trim();
 }
 
 const fixtures = [
@@ -78,15 +78,15 @@ const fixtures = [
       nap
     `,
     expected: dedent`
-      set x_1 = 0
-      whisker ((x_1 < 5)) {
-        set y_2 = 0
-        whisker ((y_2 < 5)) {
-          console.log((x_1 * y_2))
-          y_2 = (y_2 + 1)
-          break
+      let x_1 = 0;
+      while ((x_1 < 5)) {
+        let y_2 = 0;
+        while ((y_2 < 5)) {
+          console.log((x_1 * y_2));
+          y_2 = (y_2 + 1);
+          break;
         }
-        x_1 = (x_1 + 1)
+        x_1 = (x_1 + 1);
       }
     `,
   },
@@ -170,13 +170,13 @@ const fixtures = [
       }
     `,
   },
-]
+];
 
 describe("The code generator", () => {
   for (const fixture of fixtures) {
     it(`produces expected js output fur the ${fixture.name} program`, () => {
-      const actual = generate(optimize(analyze(parse(fixture.source))))
-      assert.deepEqual(actual, fixture.expected)
-    })
+      const actual = generate(optimize(analyze(parse(fixture.source))));
+      assert.deepEqual(actual, fixture.expected);
+    });
   }
-})
+});
