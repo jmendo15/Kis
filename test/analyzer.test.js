@@ -49,6 +49,11 @@ const semanticErrors = [
     "purr 5",
     /Return\s+can\s+only\s+appear\s+in\s+a\s+function/,
   ],
+  [
+    "function call with wrong number of arguments",
+    "kitty sum(a: int, b: int): purr a + b; sum(1);",
+    /Incorrect number of arguments/,
+  ],
 ];
 
 describe("Kis language analyzer", () => {
