@@ -84,7 +84,7 @@ export function ifStatement(test, consequent, alternate) {
 }
 export function longIfStatement(test, consequent, alternate) {
   return {
-    type: "LongIfStatement", // You might name this just 'IfStatement' if you prefer
+    type: "LongIfStatement",
     test: test,
     consequent: consequent,
     alternate: alternate,
@@ -152,7 +152,7 @@ export function memberExpression(object, op, field) {
 }
 
 export function functionCall(callee, args) {
-  return { kind: "FunctionCall", callee, args }; //, type: callee.type.returnType };
+  return { kind: "FunctionCall", callee, args };
 }
 
 export function constructorCall(callee, args) {
