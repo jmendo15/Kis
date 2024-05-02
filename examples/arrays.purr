@@ -1,0 +1,3 @@
+fur i in [5, 10]:
+  meow(i)
+nap

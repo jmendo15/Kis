@@ -1,0 +1,6 @@
+set x = 3 * 7
+pounce x++
+pounce x--
+set y = true
+reset y = 5 ** (-x) / (-100) > (-x) || false
+meow((y && y) || false || (x*2) != 5)
