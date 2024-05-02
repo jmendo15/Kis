@@ -89,7 +89,7 @@ const fixtures = [
       function g_5() {
         return false;
       }
-      console.log(undefined);
+      console.log(f_2(z_1, g_5()));
     `,
   },
   {
@@ -143,7 +143,7 @@ const fixtures = [
 
 describe("The code generator", () => {
   for (const fixture of fixtures) {
-    it(`produces expected js output fur the ${fixture.name} program`, () => {
+    it(`produces expected js output for the ${fixture.name} program`, () => {
       const actual = generate(optimize(analyze(parse(fixture.source))));
       assert.deepEqual(actual, fixture.expected);
     });
