@@ -84,7 +84,7 @@ export function ifStatement(test, consequent, alternate) {
 }
 export function longIfStatement(test, consequent, alternate) {
   return {
-    type: "LongIfStatement", // You might name this just 'IfStatement' if you prefer
+    type: "LongIfStatement",
     test: test,
     consequent: consequent,
     alternate: alternate,

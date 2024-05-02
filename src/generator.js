@@ -2,8 +2,6 @@
 // accepts a program representation and returns the JavaScript translation
 // as a string.
 
-// import { ClassType, Type } from "./core.js"
-// import { Type } from "./core.js"
 import { voidType, standardLibrary } from "./core.js";
 
 export default function generate(program) {
@@ -50,7 +48,6 @@ export default function generate(program) {
       output.push(`let ${gen(d.variable)} = ${gen(d.initializer)};`);
     },
     TypeDeclaration(d) {
-      // The only type declaration in Carlos is the struct! Becomes a JS class.
       output.push(`class ${gen(d.type)} {`);
       output.push(`constructor(${d.type.fields.map(gen).join(",")}) {`);
       for (let field of d.type.fields) {
@@ -186,36 +183,6 @@ export default function generate(program) {
       const args = c.args.map((arg) => gen(arg)).join(", ");
       return `${callee}(${args})`;
     },
-
-    // FunctionCall(c) {
-    //   if (standardFunctions.has(c.callee)) {
-    //     // Handle standard library functions with special cases
-    //     const stdFuncCode = standardFunctions.get(c.callee)(c.args.map(gen));
-    //     if (c.callee.type.returnType !== voidType) {
-    //       return stdFuncCode;
-    //     }
-    //     output.push(`${stdFuncCode};`);
-    //     return;
-    //   }
-
-    //   const calleeCode = gen(c.callee);
-    //   const argsCode = c.args.map((arg) => gen(arg)).join(", ");
-    //   if (c.callee.type.returnType !== voidType) {
-    //     return `${calleeCode}(${argsCode})`;
-    //   }
-    //   output.push(`${calleeCode}(${argsCode});`);
-    // },
-
-    // FunctionCall(c) {
-    //   const targetCode = standardFunctions.has(c.callee)
-    //     ? standardFunctions.get(c.callee)(c.args.map(gen))
-    //     : `${gen(c.callee)}(${c.args.map(gen).join(", ")})`;
-    //   // Calls in expressions vs in statements are handled differently
-    //   if (c.callee.type.returnType !== voidType) {
-    //     return targetCode;
-    //   }
-    //   output.push(`${targetCode};`);
-    // },
     ConstructorCall(c) {
       return `new ${gen(c.callee)}(${c.args.map(gen).join(", ")})`;
     },

@@ -1,102 +1,102 @@
 Kis {
-	Kis         = Stmt+                    -- script
-                | module id Export* "nap"  -- module
+	Kis           = Stmt+                    -- script
+                   | module id Export* "nap"  -- module
 
-    Export      = export FuncDecl
+    Export        = export FuncDecl
 
-    Stmt        = VarDecl
-                | FuncDecl
-                | StructDecl
-                | Assignment
-                | ReturnStatement
-                | PrintStmt
-                | ForStmt
-                | WhileStmt
-                | IncrementStmt
-                | BreakStmt
-                | IfStmt
-                | ImportStmt
+        Stmt          = VarDecl
+                    | FuncDecl
+                    | StructDecl
+                    | Assignment
+                    | ReturnStatement
+                    | PrintStmt
+                    | ForStmt
+                    | WhileStmt
+                    | IncrementStmt
+                    | BreakStmt
+                    | IfStmt
+                    | ImportStmt
     
-    VarDecl     = set id "=" Exp
-    Assignment  = reset id "=" Exp
-    StructDecl  = house id "{" Field* "}"
-    Field       = id ":" Type
+    VarDecl         = set id "=" Exp
+    Assignment      = reset id "=" Exp
+    StructDecl      = house id "{" Field* "}"
+    Field           = id ":" Type
     
-    FuncDecl    = kitty id Params Block
-    Params      = "(" ListOf<Param, ","> ")"
-    Param       = id ":" id
-    Type        = Type "?"                                   --optional
-                | "[" Type "]"                               --array
-                | "(" ListOf<Type, ","> ")" "->" Type        --function
-                | "isInt" "(" id ")"                         --isInt
-                | "isString" "(" id ")"                      --isString
-                | id                                         --id
+    FuncDecl        = kitty id Params Block
+    Params          = "(" ListOf<Param, ","> ")"
+    Param           = id ":" id
+    Type            = Type "?"                                   --optional
+                    | "[" Type "]"                               --array
+                    | "(" ListOf<Type, ","> ")" "->" Type        --function
+                    | "isInt" "(" id ")"                         --isInt
+                    | "isString" "(" id ")"                      --isString
+                    | id                                         --id
     
-    PrintStmt   = "meow" "(" Exp ")"
+    PrintStmt       = "meow" "(" Exp ")"
 
-    Block            = ":" Stmt* "nap"
-    IfStmt           = if Exp ":" Stmt* else (Block | IfStmt)     --long
-                     | if Exp Block                               --short
-    WhileStmt        = while Exp Block
-    ForStmt          = for id in Exp Block
-    ImportStmt       = import id
-    IncrementStmt    = pounce Exp7 ("++" |"--")       --pounce              
-    BreakStmt        = break
-    ReturnStatement  = return Exp
+    Block           = ":" Stmt* "nap"
+    IfStmt          = if Exp ":" Stmt* else (Block | IfStmt)        --long
+                    | if Exp Block                                  --short
+    WhileStmt       = while Exp Block
+    ForStmt         = for id in Exp Block
+    ImportStmt      = import id
+    IncrementStmt   = pounce Exp7 ("++" |"--")                      --pounce              
+    BreakStmt       = break
+    ReturnStatement = return Exp
     
-    Exp          = ("-" | "!") Exp7                            --unary
-                 | Exp1 "?" Exp1 ":" Exp                       --ternary
-                 | Exp1
+    Exp             = ("-" | "!") Exp7                              --unary
+                    | Exp1 "?" Exp1 ":" Exp                         --ternary
+                    | Exp1
   
-    Exp1          = Exp1 "||" Exp2                               --binary
-                  | Exp1 "&&" Exp2  			      --addOrConcat
-             	  | Exp2
-    Exp2          = Exp2 "&&" Exp3                               --binary
-             	  | Exp3
-    Exp3          = Exp4 ("<="|"<"|"=="|"!="|">="|">") Exp4         --binary
-             	  | Exp4
-    Exp4           = Exp4 ("+" | "-") Exp5                --binary
-                  | Exp5
-    Exp5          = Exp5 ("*" | "/" | "%") Exp6          --binary
-                  | Exp6
-    Exp6          = Exp7 "**" Exp6                       --binary
-                  | Exp7
-    Exp7          = num
-                  | true
-                  | false
-                  | id "(" ListOf<Exp, ","> ")"        --call
-                  | id                                 --id
-                  | "(" Exp ")"                        --parens
-                  | stringLiteral
-                  |"[" ArrayElements "]"                -- array 
+    Exp1            = Exp1 "||" Exp2                                --binary
+                    | Exp1 "&&" Exp2  			                    --addOrConcat
+             	    | Exp2
+    Exp2            = Exp2 "&&" Exp3                                --binary
+             	    | Exp3
+    Exp3            = Exp4 ("<="|"<"|"=="|"!="|">="|">") Exp4       --binary
+             	    | Exp4
+    Exp4            = Exp4 ("+" | "-") Exp5                         --binary
+                    | Exp5
+    Exp5            = Exp5 ("*" | "/" | "%") Exp6                   --binary
+                    | Exp6
+    Exp6            = Exp7 "**" Exp6                                --binary
+                    | Exp7
+    Exp7            = num
+                    | true
+                    | false
+                    | id "(" ListOf<Exp, ","> ")"                   --call
+                    | id                                            --id
+                    | "(" Exp ")"                                   --parens
+                    | stringLiteral
+                    |"[" ArrayElements "]"                          -- array 
     
-    stringLiteral = "\"" (~"\"" any)* "\""
-    ArrayElements = ListOf<Exp, ",">             
-    if           = "if" ~alnum
-    in           = "in" ~alnum
-    elseif       = "elseif" ~alnum
-    else         = "else" ~alnum
-    for          = "fur" ~alnum
-    while        = "whisker" ~alnum
-    class        = "class" ~alnum 
-    import       = "import" ~alnum 
-    export       = "export" ~alnum 
-    module       = "module" ~alnum 
-    pounce       = "pounce" ~alnum
-    break        = "break" ~alnum
-    return       = "purr" ~alnum
-    endkw        = "nap" ~alnum
-    kitty        = "kitty" ~alnum
-    set          = "set" ~alnum
-    reset        = "reset" ~alnum
-    house        = "house" ~alnum
-    num	         = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
-    true	     = "true" ~idchar
-    false        = "false" ~idchar
-    id           = ~keyword letter alnum*
-    idchar       = letter | digit | "_"
-    keyword      = if | elseif | else | for | while | class
-     | return
-                 | module | export | import | endkw
-    space       += "//" (~"\n" any)*                             --comment
+    stringLiteral   = "\"" (~"\"" any)* "\""
+    ArrayElements   = ListOf<Exp, ",">             
+    if              = "if" ~alnum
+    in              = "in" ~alnum
+    elseif          = "elseif" ~alnum
+    else            = "else" ~alnum
+    for             = "fur" ~alnum
+    while           = "whisker" ~alnum
+    class           = "class" ~alnum 
+    import          = "import" ~alnum 
+    export          = "export" ~alnum 
+    module          = "module" ~alnum 
+    pounce          = "pounce" ~alnum
+    break           = "break" ~alnum
+    return          = "purr" ~alnum
+    endkw           = "nap" ~alnum
+    kitty           = "kitty" ~alnum
+    set             = "set" ~alnum
+    reset           = "reset" ~alnum
+    house           = "house" ~alnum
+    num	            = digit+ ("." digit+)? (("E" | "e") ("+" | "-")? digit+)?
+    true	        = "true" ~idchar
+    false           = "false" ~idchar
+    id              = ~keyword letter alnum*
+    idchar          = letter | digit | "_"
+    keyword         = if | elseif | else | for | while | class
+                    | return
+                    | module | export | import | endkw
+    space           += "//" (~"\n" any)*                             --comment
 }

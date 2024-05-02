@@ -66,7 +66,7 @@ describe("Kis language analyzer", () => {
   }
   // Test to ensure the analyzer produces the expected representation for a trivial program
   it("produces the expected representation for a trivial program", () => {
-    const sample = "set x = 5 + 3 meow(x)"; // An example simple program
+    const sample = "set x = 5 + 3 meow(x)";
     const expected = {
       kind: "Script",
       statements: [

@@ -1,11 +1,5 @@
 // import * as assert from "assert/strict"
 
-// describe('Sample Test', () => {
-//     it('should be that true == true', () => {
-//         assert.equal(true, true)
-//     });
-// });
-
 import assert from "node:assert/strict";
 import parse from "../src/parser.js";
 
@@ -91,7 +85,6 @@ describe("The parser", () => {
   }
   for (const [scenario, source, errorMessagePattern] of syntaxErrors) {
     it(`does not permit ${scenario}`, () => {
-      //let err = parse(source)
       assert.throws(() => parse(source), errorMessagePattern);
     });
   }

@@ -7,12 +7,6 @@ const ANY = core.anyType;
 const VOID = core.voidType;
 
 class Context {
-  // Like most statically-scoped languages, Carlos contexts will contain a
-  // map for their locally declared identifiers and a reference to the parent
-  // context. The parent of the global context is null. In addition, the
-  // context records whether analysis is current within a loop (so we can
-  // properly check break statements), and reference to the current function
-  // (so we can properly check return statements).
   constructor({
     parent = null,
     locals = new Map(),
@@ -57,28 +51,6 @@ export default function analyze(match) {
   function mustHaveBooleanType(e, at) {
     must(e.type === BOOLEAN, "Expected a boolean", at);
   }
-  function determineCommonType(types) {
-    if (types.every((type) => type === types[0])) {
-      return types[0];
-    } else {
-      throw new Error("Array elements must have the same type");
-    }
-  }
-
-  function mustBeInLoop(at) {
-    must(context.inLoop, "Break can only appear in a loop", at);
-  }
-  function mustAllHaveSameType(expressions, at) {
-    // Used to check the elements of an array expression, and the two
-    // arms of a conditional expression, among other scenarios.
-    must(
-      expressions
-        .slice(1)
-        .every((e) => equivalent(e.type, expressions[0].type)),
-      "Not all elements have the same type",
-      at
-    );
-  }
   function mustHaveAnArrayType(expression, at) {
     const isArray = expression.type.kind === "ArrayType";
     must(isArray, "Expected an array type", at);
@@ -91,20 +63,7 @@ export default function analyze(match) {
   function mustBeInAFunction(at) {
     must(context.function, "Return can only appear in a function", at);
   }
-  function mustBeAssignable(e, { toType: type }, at) {
-    const message = `Cannot assign a ${typeDescription(
-      e.type
-    )} to a ${typeDescription(type)}`;
-    must(assignable(e.type, type), message, at);
-  }
 
-  function mustReturnSomething(f, at) {
-    must(
-      f.type.returnType !== VOID,
-      "Cannot return a value from this function",
-      at
-    );
-  }
   function isTypeCompatible(sourceType, targetType) {
     if (sourceType === targetType) {
       return true; // Same type can always be assigned
@@ -112,15 +71,6 @@ export default function analyze(match) {
       return true; // Example: allowing int to be assigned to float
     }
     return false; // Other cases are incompatible
-  }
-
-  function mustBeAssignable(source, target, at) {
-    const isCompatible = isTypeCompatible(source.type, target.type);
-    must(
-      isCompatible,
-      `Type mismatch: cannot assign ${source.type} to ${target.type}`,
-      at
-    );
   }
 
   // Building the program representation will be done together with semantic
@@ -159,8 +109,6 @@ export default function analyze(match) {
       const target = context.lookup(id.sourceString);
       mustHaveBeenFound(target, id.sourceString, { at: id });
       const source = exp.rep();
-      // TODO mustBeAssignable(target, initializer, { at: id });
-
       return core.assignment(target, source);
     },
 
@@ -193,11 +141,6 @@ export default function analyze(match) {
       });
       console.log("PARAMETERS ARE", parameters.sourceString);
       const params = parameters.rep();
-      // const paramTypes = params.map((param) => param.type);
-      // const returnType = type.children?.[0]?.rep() ?? VOID;
-      // func.type = core.functionType(paramTypes, returnType);
-
-      // Analyze body while still in child context
       const body = block.rep();
       context = context.parent;
       // Go back up to the outer context before returning
@@ -242,7 +185,7 @@ export default function analyze(match) {
     Type_isString(_typeCheck, _left, id, _right) {
       const variableType = context.lookup(id.sourceString);
       mustHaveBeenFound(variableType, id.sourceString, { at: id });
-      const isString = core.isStringType(variableType); // Assuming isStringType is a function that checks if type is string
+      const isString = core.isStringType(variableType); //isStringType is a function that checks if type is string
       mustBeAType(isString, { at: id });
       return isString;
     },
@@ -319,38 +262,6 @@ export default function analyze(match) {
       context.importModule(module);
     },
 
-    // CompareStrings(
-    //   identifier,
-    //   _equals,
-    //   _openQuote,
-    //   stringContent,
-    //   _closeQuote
-    // ) {
-    //   // Retrieve the variable's name from the identifier part of the grammar.
-    //   const variableName = identifier.sourceString;
-    //   // Look up the variable in the current context to get its type and value.
-    //   const variable = context.lookup(variableName);
-    //   if (!variable) {
-    //     throw new Error(`Variable '${variableName}' not found.`);
-    //   }
-    //   if (!isTypeCompatibleWithString(variable.type)) {
-    //     throw new Error(
-    //       `Incompatible types for comparison: ${variable.type} cannot be compared to a string.`
-    //     );
-    //   }
-    //   // Extract the string literal value. Since the string content is matched as a sequence
-    //   // of any characters except the closing quote, we join them together.
-    //   const stringParts = stringContent.children.map((part) => {
-    //     if (part.sourceString === '\\"') {
-    //       return '"'; // Unescaping a double quote
-    //     } else {
-    //       return part.sourceString;
-    //     }
-    //   });
-    //   const stringValue = stringParts.join("");
-    //   return core.createStringComparisonExpression(variable, stringValue);
-    // },
-
     IncrementStmt_pounce(_pounce, exp, operator) {
       const variable = exp.rep();
       mustHaveIntegerType(variable, { at: exp });
@@ -361,13 +272,7 @@ export default function analyze(match) {
 
     ReturnStatement(returnKeyword, exp) {
       mustBeInAFunction({ at: returnKeyword });
-      // mustReturnSomething(context.function, { at: returnKeyword });
       const returnExpression = exp.rep();
-      // mustBeReturnable(
-      //   returnExpression,
-      //   { from: context.function },
-      //   { at: exp }
-      // );
       return core.returnStatement(returnExpression);
     },
 
@@ -462,19 +367,8 @@ export default function analyze(match) {
     Exp(expression) {
       return expression.rep();
     },
-    // Exp7_array(_openBracket, elements, _closeBracket) {
-    //   return {
-    //     type: "ArrayExpression",
-    //     elements: elements.rep(), // Ensure that 'elements' correctly calls the ArrayElements semantic action
-    //   };
-    // },
     Exp7_array(_openBracket, elements, _closeBracket) {
       const elementReps = elements.asIteration().children.map((e) => e.rep());
-      // const elementType = determineCommonType(elementReps.map((e) => e.type));
-      // return {
-      //   type: { category: "Array", elementType: elementType },
-      //   elements: elementReps,
-      // };
       return core.arrayExpression(elementReps);
     },
 
@@ -491,15 +385,8 @@ export default function analyze(match) {
     },
 
     num(_whole, _point, _fraction, _e, _sign, _exponent) {
-      // Carlos floats will be represented as plain JS numbers
       return Number(this.sourceString);
     },
-
-    // Exp7_arrayexp(_open, args, _close) {
-    //   const elements = args.asIteration().children.map((e) => e.rep());
-    //   mustAllHaveSameType(elements, { at: args });
-    //   return core.arrayExpression(elements);
-    // },
   });
   return builder(match).rep();
 }

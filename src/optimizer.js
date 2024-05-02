@@ -47,7 +47,7 @@ const optimizers = {
   PrintStatement(s) {
     if (!s.expression) {
       console.error("Missing expression in print statement", s);
-      return; // Skip optimization or handle the error appropriately
+      return;
     }
     s.expression = optimize(s.expression);
     return s;
