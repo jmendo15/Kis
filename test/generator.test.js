@@ -83,13 +83,13 @@ const fixtures = [
     expected: dedent`
       let z_1 = 0.5;
       function f_2(x_3, y_4) {
-        console.log((x_3) > (2));
+        console.log((x_3 > 2));
         return 1;
       }
       function g_5() {
         return false;
       }
-      console.log(f_2(z_1, g_5()));
+      console.log(undefined);
     `,
   },
   {

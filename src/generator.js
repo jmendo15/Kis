@@ -180,16 +180,42 @@ export default function generate(program) {
       const chain = e.op === "." ? "" : e.op;
       return `(${object}${chain}[${field}])`;
     },
+    // Example of function call handling in the generator
     FunctionCall(c) {
-      const targetCode = standardFunctions.has(c.callee)
-        ? standardFunctions.get(c.callee)(c.args.map(gen))
-        : `${gen(c.callee)}(${c.args.map(gen).join(", ")})`;
-      // Calls in expressions vs in statements are handled differently
-      if (c.callee.type.returnType !== voidType) {
-        return targetCode;
-      }
-      output.push(`${targetCode};`);
+      const callee = gen(c.callee);
+      const args = c.args.map((arg) => gen(arg)).join(", ");
+      return `${callee}(${args})`;
     },
+
+    // FunctionCall(c) {
+    //   if (standardFunctions.has(c.callee)) {
+    //     // Handle standard library functions with special cases
+    //     const stdFuncCode = standardFunctions.get(c.callee)(c.args.map(gen));
+    //     if (c.callee.type.returnType !== voidType) {
+    //       return stdFuncCode;
+    //     }
+    //     output.push(`${stdFuncCode};`);
+    //     return;
+    //   }
+
+    //   const calleeCode = gen(c.callee);
+    //   const argsCode = c.args.map((arg) => gen(arg)).join(", ");
+    //   if (c.callee.type.returnType !== voidType) {
+    //     return `${calleeCode}(${argsCode})`;
+    //   }
+    //   output.push(`${calleeCode}(${argsCode});`);
+    // },
+
+    // FunctionCall(c) {
+    //   const targetCode = standardFunctions.has(c.callee)
+    //     ? standardFunctions.get(c.callee)(c.args.map(gen))
+    //     : `${gen(c.callee)}(${c.args.map(gen).join(", ")})`;
+    //   // Calls in expressions vs in statements are handled differently
+    //   if (c.callee.type.returnType !== voidType) {
+    //     return targetCode;
+    //   }
+    //   output.push(`${targetCode};`);
+    // },
     ConstructorCall(c) {
       return `new ${gen(c.callee)}(${c.args.map(gen).join(", ")})`;
     },
